@@ -1,5 +1,5 @@
 import React from 'react';
-import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { PackageManagerProvider } from './context/PackageManagerContext';
 import { Navbar } from './components/Navbar';
@@ -66,7 +66,7 @@ export const App: React.FC = () => {
   return (
     <ThemeProvider>
       <PackageManagerProvider>
-        <Router>
+        <Router basename={import.meta.env.BASE_URL}>
           <AppShell />
         </Router>
       </PackageManagerProvider>
