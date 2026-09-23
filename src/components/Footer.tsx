@@ -78,7 +78,25 @@ export const Footer: React.FC = () => {
 
         <div className="mt-8 pt-8 border-t border-zinc-200 dark:border-zinc-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500">
           <div>
-            MIT © {new Date().getFullYear()} Ashish Ranjan & EnvBoot Contributors.
+            MIT © {new Date().getFullYear()}{' '}
+            <a
+              href="https://github.com/ashishrbuilds"
+              target="_blank"
+              rel="noreferrer"
+              className="text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-2 font-medium"
+            >
+              Ashish Ranjan
+            </a>{' '}
+            &{' '}
+            <a
+              href="https://github.com/ashishrbuilds/envboot/graphs/contributors"
+              target="_blank"
+              rel="noreferrer"
+              className="text-zinc-700 dark:text-zinc-300 hover:text-zinc-950 dark:hover:text-white transition-colors underline decoration-zinc-300 dark:decoration-zinc-700 underline-offset-2"
+            >
+              EnvBoot Contributors
+            </a>
+            .
           </div>
           <div className="font-mono text-[11px]">
             Guarding environments with zero runtime dependencies.
