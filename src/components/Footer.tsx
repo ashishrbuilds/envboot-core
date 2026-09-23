@@ -72,6 +72,16 @@ export const Footer: React.FC = () => {
                   Interactive Playground
                 </Link>
               </li>
+              <li>
+                <a 
+                  href="/llms.txt" 
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="hover:text-zinc-950 dark:hover:text-white transition-colors inline-flex items-center gap-1 font-mono text-[11px]"
+                >
+                  llms.txt (LLM Context) <ExternalLink className="w-3 h-3" />
+                </a>
+              </li>
             </ul>
           </div>
         </div>

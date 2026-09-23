@@ -1,0 +1,142 @@
+# EnvBoot
+
+> Zero-runtime-dependency environment discovery, contract synchronization, and startup validation tool for JavaScript and TypeScript.
+
+EnvBoot ensures your application never boots with a broken or missing environment. It automatically scans source code for environment variable accesses (`process.env`, `import.meta.env`, `Bun.env`, `Deno.env.get`), constructs a type-checked contract (`.envboot.json`), synchronizes `.env.example` templates, and validates variables at boot time with zero runtime dependencies.
+
+- Documentation: https://ashishrbuilds.github.io/envboot/
+- GitHub: https://github.com/ashishrbuilds/envboot
+- npm: https://www.npmjs.com/package/envboot
+- Author: Ashish Ranjan (https://github.com/ashishrbuilds)
+- License: MIT
+
+## Quick Start
+
+```bash
+# 1. Automatically scan codebase and generate .envboot.json contract
+npx envboot@latest init
+
+# 2. Validate current environment against the contract
+npx envboot check
+
+# 3. Run a diagnostic health check
+npx envboot doctor
+
+# 4. Sync contract when code changes
+npx envboot sync
+```
+
+## CLI Commands
+
+- `envboot init`: Scans codebase for env variable usages, prompts for types/descriptions, creates `.envboot.json`, updates `.env.example`, and optionally injects startup check.
+  - `-y, --yes`: Skip interactive prompts and accept detected defaults.
+  - `--skip-install`: Skip automatic package installation.
+- `envboot check`: Validates active environment against `.envboot.json`. Exits with code 0 on success, code 1 on failure.
+  - `-c, --config <path>`: Custom path to `.envboot.json`.
+  - `--strict`: Fails if variables used in source code are missing from contract (drift protection).
+- `envboot doctor`: Diagnostic health check inspecting environment, contract, framework, and package health.
+  - `-c, --config <path>`: Custom path to `.envboot.json`.
+- `envboot sync`: Synchronizes `.envboot.json` and `.env.example` with current codebase changes.
+  - `-y, --yes`: Accept all discovered variables automatically.
+  - `--prune`: Remove variables from contract that are no longer referenced in code.
+  - `-c, --config <path>`: Custom path to `.envboot.json`.
+
+## Runtime Validation API
+
+Zero runtime dependencies. Lightweight and tree-shakeable.
+
+```typescript
+import { validateEnv, getEnv, isEnvValid } from 'envboot';
+
+// Validate at startup — throws an informative error if variables are missing
+validateEnv();
+
+// Type-safe variable retrieval with optional fallback
+const port = getEnv('PORT', '3000');
+const dbUrl = getEnv('DATABASE_URL');
+
+// Non-throwing check
+if (!isEnvValid()) {
+  console.warn('Environment incomplete');
+}
+```
+
+### Browser / Client-Side (Vite, Next.js client, SPAs)
+
+```typescript
+import { validateBrowserEnv } from 'envboot/browser';
+
+// Validates import.meta.env or window.__ENV__ with browser-safe error reporting
+validateBrowserEnv();
+```
+
+## Contract Specification (`.envboot.json`)
+
+```json
+{
+  "$schema": "https://envboot.dev/schema.json",
+  "version": "1.0",
+  "required": {
+    "DATABASE_URL": {
+      "type": "string",
+      "description": "PostgreSQL database connection URI"
+    },
+    "PORT": {
+      "type": "number",
+      "default": 3000,
+      "description": "HTTP server listening port"
+    },
+    "NODE_ENV": {
+      "type": "enum",
+      "values": ["development", "test", "production"],
+      "default": "development"
+    }
+  },
+  "optional": {
+    "REDIS_URL": {
+      "type": "string",
+      "description": "Optional Redis cache endpoint"
+    },
+    "ENABLE_METRICS": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}
+```
+
+## Supported Frameworks & Runtimes
+
+- **Node.js**: Express, Fastify, NestJS, Koa
+- **Next.js**: App Router (`instrumentation.ts`), Pages Router (`pages/_app.tsx`)
+- **Vite**: React, Vue, Svelte, Solid (`src/main.ts` using `envboot/browser`)
+- **Bun**: Native support with `Bun.env`
+- **Deno**: Native support with `Deno.env`
+
+## CI/CD Drift Guard (GitHub Actions)
+
+```yaml
+name: EnvBoot Contract Guard
+on: [push, pull_request]
+
+jobs:
+  env-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm ci
+      - run: npx envboot check --strict
+```
+
+## Documentation Links
+
+- [Quickstart](https://ashishrbuilds.github.io/envboot/#/docs/quickstart): Step-by-step introduction and setup guide.
+- [CLI Reference](https://ashishrbuilds.github.io/envboot/#/docs/cli): Detailed options, flags, and exit codes for all CLI commands.
+- [Framework Recipes](https://ashishrbuilds.github.io/envboot/#/docs/frameworks): Integration instructions for Next.js, Vite, Node, Bun, and Deno.
+- [CI/CD Integration](https://ashishrbuilds.github.io/envboot/#/docs/ci-cd): Enforce zero env drift in GitHub Actions and pre-commit hooks.
+- [Runtime API](https://ashishrbuilds.github.io/envboot/#/docs/api): Complete API reference for Node and Browser runtimes.
+- [Interactive Playground](https://ashishrbuilds.github.io/envboot/#/playground): In-browser schema generator and testbed.
+- [Changelog](https://ashishrbuilds.github.io/envboot/#/changelog): Version releases and sync history.

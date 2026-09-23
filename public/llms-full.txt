@@ -1,0 +1,339 @@
+# EnvBoot — Complete Documentation for LLMs
+
+> Zero-runtime-dependency environment discovery, contract synchronization, and startup validation tool for JavaScript and TypeScript projects.
+
+Repository: https://github.com/ashishrbuilds/envboot
+Documentation: https://ashishrbuilds.github.io/envboot/
+npm: https://www.npmjs.com/package/envboot
+Author: Ashish Ranjan (https://github.com/ashishrbuilds)
+License: MIT
+
+---
+
+## Table of Contents
+1. Core Philosophy & Value Proposition
+2. Installation & Quickstart
+3. CLI Commands Reference
+   - `envboot init`
+   - `envboot check`
+   - `envboot doctor`
+   - `envboot sync`
+4. Automatic Cascade .env Loader
+5. Contract Schema (`.envboot.json`)
+6. Runtime Validation API
+   - Node.js Runtime (`envboot`)
+   - Browser Runtime (`envboot/browser`)
+7. Framework Integration Recipes
+   - Next.js (App Router & Pages Router)
+   - Vite (React, Vue, Svelte, Solid)
+   - Node.js (Express, Fastify, Koa, NestJS)
+   - Bun
+   - Deno
+8. CI/CD Pipeline Integration
+9. Troubleshooting & FAQ
+
+---
+
+## 1. Core Philosophy & Value Proposition
+
+Environment configuration bugs are notoriously insidious: an application boots up successfully, passes initial load, and only fails minutes or hours later in production when a specific endpoint accesses an undefined environment variable (`DATABASE_URL`, `JWT_SECRET`, `STRIPE_KEY`).
+
+EnvBoot solves this with:
+- **Zero Runtime Dependencies**: The runtime validator has zero third-party dependencies, adding 0KB of bloat to production bundles.
+- **Contract as Code (`.envboot.json`)**: An explicit JSON schema file declaring required variables, optional variables, types, defaults, and validation rules.
+- **AST / Code Scanner**: Automatically discovers `process.env.*`, `import.meta.env.*`, `Bun.env.*`, and `Deno.env.get(*)` across TypeScript, JavaScript, JSX, TSX, Vue, and Svelte files.
+- **Automatic Drift Prevention**: Flags undeclared variables in CI/CD and pre-commit checks before code is deployed.
+- **Built-in Cascade Loader**: Loads `.env.local`, `.env.[mode].local`, `.env.[mode]`, and `.env` in the standard priority order without requiring `dotenv`.
+
+---
+
+## 2. Installation & Quickstart
+
+### One-line initialization:
+```bash
+# Run interactively:
+npx envboot@latest init
+
+# Run non-interactively (accepts all detected defaults):
+npx envboot@latest init -y
+```
+
+### Direct package installation:
+```bash
+# npm
+npm install --save-dev envboot
+
+# pnpm
+pnpm add -D envboot
+
+# yarn
+yarn add -D envboot
+
+# bun
+bun add -d envboot
+```
+
+---
+
+## 3. CLI Commands Reference
+
+### 3.1 `envboot init`
+Scans the current repository for environment variable usages, generates the initial `.envboot.json` contract, creates or updates `.env.example`, and optionally adds the startup validation import to your main entry point.
+
+Options:
+- `-y, --yes`: Skip interactive prompts; use auto-detected variable names, types, and defaults.
+- `--skip-install`: Do not run package manager install commands.
+
+Example:
+```bash
+npx envboot init
+```
+
+### 3.2 `envboot check`
+Validates active environment variables against the `.envboot.json` contract.
+Returns exit code `0` if all required variables are valid, or exit code `1` if required variables are missing or have invalid types.
+
+Options:
+- `-c, --config <path>`: Specify a custom path to `.envboot.json`.
+- `--strict`: Enable strict drift protection. Exits with code 1 if source code references environment variables that are missing from the contract.
+
+Example:
+```bash
+npx envboot check
+npx envboot check --strict
+```
+
+### 3.3 `envboot doctor`
+Performs an in-depth diagnostic audit of your project's environment setup:
+- Detects active framework (Next.js, Vite, Express, NestJS, Bun, Deno).
+- Detects package manager (npm, pnpm, yarn, bun).
+- Inspects entry point injection.
+- Validates `.envboot.json` syntax and schema compliance.
+- Audits `.env`, `.env.local`, and `.env.example` consistency.
+- Measures environment drift between source code and contract.
+
+Options:
+- `-c, --config <path>`: Custom configuration file path.
+
+Example:
+```bash
+npx envboot doctor
+```
+
+### 3.4 `envboot sync`
+Scans the codebase for newly added or deleted environment variable references and synchronizes `.envboot.json` and `.env.example`.
+
+Options:
+- `-y, --yes`: Automatically accept and append all newly discovered variables without prompting.
+- `--prune`: Remove variables from `.envboot.json` that are no longer used anywhere in the codebase.
+- `-c, --config <path>`: Custom configuration path.
+
+Example:
+```bash
+npx envboot sync
+npx envboot sync -y --prune
+```
+
+---
+
+## 4. Automatic Cascade .env Loader
+
+EnvBoot natively parses and loads `.env` files in cascading order (highest priority to lowest):
+1. `.env.local` (Local overrides, ignored by git)
+2. `.env.[NODE_ENV].local` (e.g., `.env.development.local`)
+3. `.env.[NODE_ENV]` (e.g., `.env.development`, `.env.production`, `.env.test`)
+4. `.env` (Base defaults)
+
+Existing environment variables in `process.env` are never overwritten by loaded file contents, honoring container and deployment orchestrator settings (Kubernetes, Docker, Vercel, Railway).
+
+---
+
+## 5. Contract Schema (`.envboot.json`)
+
+The `.envboot.json` contract file lives in your project root:
+
+```json
+{
+  "$schema": "https://envboot.dev/schema.json",
+  "version": "1.0",
+  "required": {
+    "DATABASE_URL": {
+      "type": "string",
+      "description": "PostgreSQL database connection URI",
+      "pattern": "^postgresql://"
+    },
+    "PORT": {
+      "type": "number",
+      "default": 3000,
+      "description": "Server HTTP port"
+    },
+    "NODE_ENV": {
+      "type": "enum",
+      "values": ["development", "test", "production"],
+      "default": "development",
+      "description": "Application execution mode"
+    }
+  },
+  "optional": {
+    "REDIS_URL": {
+      "type": "string",
+      "description": "Redis connection URL for caching"
+    },
+    "ENABLE_METRICS": {
+      "type": "boolean",
+      "default": false,
+      "description": "Flag to enable Prometheus telemetry"
+    }
+  },
+  "ignore": [
+    "npm_*",
+    "NODE_OPTIONS"
+  ]
+}
+```
+
+### Supported Variable Types:
+- `string`: Any text string. Supports regex `pattern`.
+- `number`: Numeric string parsed and checked as finite number.
+- `boolean`: Accepts `"true"`, `"false"`, `"1"`, `"0"`.
+- `enum`: Restricted to explicit set of allowed string `values`.
+- `url`: Validates as a RFC-compliant URL.
+
+---
+
+## 6. Runtime Validation API
+
+### 6.1 Server Runtime (`envboot`)
+
+```typescript
+import { validateEnv, getEnv, isEnvValid } from 'envboot';
+
+// 1. Startup validation (throws Error if invalid)
+validateEnv();
+
+// 2. Safely read typed variables
+const dbUrl = getEnv('DATABASE_URL');
+const port = getEnv('PORT', '3000');
+
+// 3. Boolean check without throwing
+if (!isEnvValid()) {
+  console.warn('Some environment variables are missing');
+}
+```
+
+### 6.2 Browser / Client Runtime (`envboot/browser`)
+
+Designed for Vite, browser SPAs, and client-side web bundles. Reads from `import.meta.env` or `window.__ENV__`.
+
+```typescript
+import { validateBrowserEnv } from 'envboot/browser';
+
+// Validates client-exposed variables (e.g. VITE_* or NEXT_PUBLIC_*)
+validateBrowserEnv();
+```
+
+---
+
+## 7. Framework Integration Recipes
+
+### Next.js (App Router)
+Create `instrumentation.ts` in the project root:
+```typescript
+export async function register() {
+  if (process.env.NEXT_RUNTIME === 'nodejs') {
+    const { validateEnv } = await import('envboot');
+    validateEnv();
+  }
+}
+```
+
+### Vite (React / Vue / Svelte)
+In `src/main.tsx` or `src/main.ts`:
+```typescript
+import { validateBrowserEnv } from 'envboot/browser';
+validateBrowserEnv();
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+// ... rest of app
+```
+
+### Node.js (Express / Fastify / Koa)
+At the very top of `src/index.ts` or `src/server.ts`:
+```typescript
+import 'envboot/register'; // Or call validateEnv()
+import express from 'express';
+
+const app = express();
+// ...
+```
+
+### Bun
+```typescript
+import { validateEnv } from 'envboot';
+validateEnv();
+
+export default {
+  port: process.env.PORT || 3000,
+  fetch(req) {
+    return new Response('Hello from EnvBoot on Bun!');
+  },
+};
+```
+
+### Deno
+```typescript
+import { validateEnv } from 'npm:envboot';
+validateEnv();
+
+Deno.serve({ port: 8000 }, (req) => new Response('Hello from Deno!'));
+```
+
+---
+
+## 8. CI/CD Pipeline Integration
+
+### GitHub Actions
+```yaml
+name: EnvBoot Contract Guard
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check-env:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - run: npm ci
+      - name: Validate Environment Contract & Drift
+        run: npx envboot check --strict
+```
+
+### Pre-commit Git Hook (Husky)
+In `.husky/pre-commit`:
+```bash
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+npx envboot check
+```
+
+---
+
+## 9. Troubleshooting & FAQ
+
+**Q: Does EnvBoot slow down application boot time?**
+A: No. Startup validation completes in under 2ms. It has zero runtime dependencies and compiles to minimal JavaScript.
+
+**Q: Can I use EnvBoot alongside dotenv or cross-env?**
+A: Yes! EnvBoot is completely compatible. However, EnvBoot has built-in cascade .env loading, so you can often eliminate the `dotenv` package entirely.
+
+**Q: What if I have secrets that should never be in git?**
+A: Only `.envboot.json` and `.env.example` are committed to git. Your actual secrets remain safely inside `.env` or `.env.local` which are git-ignored.
