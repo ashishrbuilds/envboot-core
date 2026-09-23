@@ -193,14 +193,14 @@ export const PlaygroundPage: React.FC = () => {
               {vars.map((v) => (
                 <div
                   key={v.id}
-                  className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/60 dark:bg-zinc-900/60 flex flex-wrap items-center justify-between gap-3 text-xs"
+                  className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/60 dark:bg-zinc-900/60 flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs"
                 >
-                  <div className="flex items-center gap-2 font-mono font-semibold text-zinc-900 dark:text-zinc-200 min-w-[160px]">
-                    <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-zinc-600"></span>
-                    <span>{v.name}</span>
+                  <div className="flex items-center gap-2 font-mono font-semibold text-zinc-900 dark:text-zinc-200 min-w-0 truncate">
+                    <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-zinc-600 shrink-0"></span>
+                    <span className="truncate">{v.name}</span>
                   </div>
 
-                  <div className="flex items-center gap-2">
+                  <div className="flex flex-wrap items-center gap-2">
                     {/* Classification Selector */}
                     <div className="flex rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-0.5 font-mono text-[11px]">
                       {(['required', 'optional', 'ignore'] as const).map((cat) => (

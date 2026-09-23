@@ -65,7 +65,7 @@ export const QuickstartPage: React.FC = () => {
           </div>
 
           {/* Action Buttons Row */}
-          <div className="flex items-center gap-2 pt-1">
+          <div className="flex flex-wrap items-center gap-2 pt-1">
             <button
               onClick={handleCopyMarkdown}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-100 hover:bg-zinc-200 text-zinc-800 border border-zinc-200 dark:bg-zinc-900/80 dark:hover:bg-zinc-800 dark:text-zinc-300 dark:border-zinc-800 text-xs font-medium transition-colors"
@@ -145,7 +145,7 @@ export const QuickstartPage: React.FC = () => {
           </p>
 
           <div className="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/40 dark:bg-zinc-950/60">
-            <table className="w-full text-left text-xs sm:text-sm">
+            <table className="w-full min-w-[580px] text-left text-xs sm:text-sm">
               <thead>
                 <tr className="border-b border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 font-semibold">
                   <th className="py-3 px-4">Feature</th>

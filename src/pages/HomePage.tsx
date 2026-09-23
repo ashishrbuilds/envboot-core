@@ -173,7 +173,7 @@ export const HomePage: React.FC = () => {
         </div>
 
         <div className="overflow-x-auto rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950">
-          <table className="w-full text-left text-xs sm:text-sm">
+          <table className="w-full min-w-[560px] text-left text-xs sm:text-sm">
             <thead>
               <tr className="border-b border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900/80 text-zinc-700 dark:text-zinc-300 font-mono text-xs">
                 <th className="py-3.5 px-4 font-semibold">Feature</th>

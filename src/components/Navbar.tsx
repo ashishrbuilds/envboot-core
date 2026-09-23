@@ -47,7 +47,7 @@ export const Navbar: React.FC = () => {
               </span>
             </Link>
 
-            <span className="text-[11px] font-mono font-medium px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
+            <span className="hidden sm:inline-flex text-[11px] font-mono font-medium px-2 py-0.5 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400">
               v0.1.7
             </span>
           </div>
@@ -82,17 +82,24 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Right Action Utilities */}
-          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Search Box Trigger */}
+          <div className="flex items-center gap-1 sm:gap-2 shrink-0">
+            {/* Search Box Trigger (Icon on mobile, input trigger on tablet/desktop) */}
             <button
               onClick={() => setSearchOpen(true)}
-              className="flex items-center justify-between gap-3 w-40 sm:w-52 px-3 py-1.5 text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
+              className="sm:hidden p-2 rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
+              title="Search documentation"
+            >
+              <Search className="w-4 h-4" />
+            </button>
+
+            <button
+              onClick={() => setSearchOpen(true)}
+              className="hidden sm:flex items-center justify-between gap-3 w-44 md:w-52 px-3 py-1.5 text-xs text-zinc-500 dark:text-zinc-400 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-lg hover:border-zinc-300 dark:hover:border-zinc-700 hover:text-zinc-800 dark:hover:text-zinc-200 transition-colors"
               title="Search documentation (Cmd + K)"
             >
               <div className="flex items-center gap-2">
                 <Search className="w-3.5 h-3.5 text-zinc-400 dark:text-zinc-500" />
-                <span className="hidden sm:inline">Search docs...</span>
-                <span className="sm:hidden">Search</span>
+                <span>Search docs...</span>
               </div>
               <kbd className="px-1.5 py-0.5 text-[10px] font-mono text-zinc-500 dark:text-zinc-400 bg-zinc-200 dark:bg-zinc-800 border border-zinc-300 dark:border-zinc-700 rounded">
                 ⌘K

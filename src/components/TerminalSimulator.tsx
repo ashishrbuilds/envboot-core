@@ -164,12 +164,12 @@ export const TerminalSimulator: React.FC = () => {
         </div>
 
         {/* Command tabs */}
-        <div className="flex items-center gap-1.5 overflow-x-auto">
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
           {(['doctor', 'check', 'init', 'sync'] as SimulatedCommand[]).map((cmd) => (
             <button
               key={cmd}
               onClick={() => setActiveCommand(cmd)}
-              className={`px-3 py-1 rounded-lg text-xs font-mono transition-all font-medium ${
+              className={`px-3 py-1 rounded-lg text-xs font-mono transition-all font-medium whitespace-nowrap ${
                 activeCommand === cmd
                   ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 shadow-sm'
                   : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
@@ -183,7 +183,7 @@ export const TerminalSimulator: React.FC = () => {
         {activeCommand === 'check' && (
           <button
             onClick={() => setHasError(!hasError)}
-            className={`text-xs px-2.5 py-1 rounded-md border font-mono transition-colors ${
+            className={`text-xs px-2.5 py-1 rounded-md border font-mono transition-colors whitespace-nowrap ${
               hasError
                 ? 'bg-rose-500/20 text-rose-300 border-rose-500/40'
                 : 'bg-slate-800 text-slate-300 border-slate-700 hover:border-slate-600'
@@ -195,21 +195,21 @@ export const TerminalSimulator: React.FC = () => {
       </div>
 
       {/* Terminal prompt bar */}
-      <div className="px-5 py-2.5 bg-slate-950 border-b border-slate-900 font-mono text-xs text-slate-400 flex items-center gap-2">
+      <div className="px-4 sm:px-5 py-2.5 bg-slate-950 border-b border-slate-900 font-mono text-xs text-slate-400 flex items-center gap-2 overflow-x-auto">
         <span className="text-emerald-400 font-bold">$</span>
         <span className="text-slate-100 font-semibold">{current.cmd}</span>
       </div>
 
       {/* Terminal stdout body */}
-      <div className="p-6 bg-slate-950 text-slate-200 min-h-[260px] overflow-x-auto">
+      <div className="p-4 sm:p-6 bg-slate-950 text-slate-200 min-h-[260px] overflow-x-auto">
         {current.render()}
       </div>
 
       {/* Footer bar */}
-      <div className="px-5 py-2 bg-slate-900/40 border-t border-slate-900 flex items-center justify-between text-xs text-slate-500 font-mono">
+      <div className="px-4 sm:px-5 py-2 bg-slate-900/40 border-t border-slate-900 flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500 font-mono">
         <div className="flex items-center gap-2">
-          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400" />
-          <span>Secret Shield: Zero sensitive values ever printed</span>
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+          <span className="truncate">Secret Shield: Zero sensitive values printed</span>
         </div>
         <span>v0.1.7</span>
       </div>
