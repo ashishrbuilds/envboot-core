@@ -34,8 +34,8 @@ export const CliPage: React.FC = () => {
   };
 
   return (
-    <div className="flex gap-10">
-      <div className="flex-1 min-w-0 space-y-10">
+    <div className="flex gap-10 xl:gap-14 items-start w-full">
+      <div className="flex-1 min-w-0 max-w-4xl xl:max-w-5xl space-y-10">
         
         {/* Header */}
         <header className="space-y-4">
