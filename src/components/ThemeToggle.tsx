@@ -15,7 +15,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Close dropdown when clicking outside
+  // Close dropdown on click outside or Escape key
   useEffect(() => {
     if (!isOpen) return;
 
@@ -42,11 +42,11 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
     };
   }, [isOpen]);
 
-  // Segmented control variant (e.g. for Sidebar footer or settings)
+  // Segmented control variant (e.g. for Sidebar footer or Mobile drawer)
   if (variant === 'segmented') {
     return (
       <div
-        className={`inline-flex items-center p-0.5 rounded-lg bg-zinc-100 dark:bg-zinc-850 border border-zinc-200 dark:border-zinc-800 ${className}`}
+        className={`inline-flex items-center p-0.5 rounded-lg bg-zinc-200/70 dark:bg-zinc-900 border border-zinc-300/80 dark:border-zinc-800 ${className}`}
         role="group"
         aria-label="Theme mode selector"
       >
@@ -56,10 +56,10 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
           title="Light theme"
           aria-label="Light theme"
           aria-pressed={themeMode === 'light'}
-          className={`p-1.5 rounded-md transition-all duration-150 ${
+          className={`p-1.5 rounded-md transition-all duration-150 focus:outline-none focus-visible:outline-none ${
             themeMode === 'light'
-              ? 'bg-white dark:bg-zinc-700 text-zinc-950 dark:text-white shadow-xs'
-              : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
+              ? 'bg-white text-zinc-950 shadow-xs border border-zinc-200/90 font-medium'
+              : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 border border-transparent'
           }`}
         >
           <Sun className="w-3.5 h-3.5" />
@@ -71,10 +71,10 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
           title="Dark theme"
           aria-label="Dark theme"
           aria-pressed={themeMode === 'dark'}
-          className={`p-1.5 rounded-md transition-all duration-150 ${
+          className={`p-1.5 rounded-md transition-all duration-150 focus:outline-none focus-visible:outline-none ${
             themeMode === 'dark'
-              ? 'bg-white dark:bg-zinc-700 text-zinc-950 dark:text-white shadow-xs'
-              : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
+              ? 'bg-zinc-800 text-zinc-100 shadow-xs border border-zinc-700/60 font-medium'
+              : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 border border-transparent'
           }`}
         >
           <Moon className="w-3.5 h-3.5" />
@@ -83,13 +83,13 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         <button
           type="button"
           onClick={() => setThemeMode('auto')}
-          title={`System default (${resolvedTheme})`}
+          title={`System auto (${resolvedTheme})`}
           aria-label="System theme (auto)"
           aria-pressed={themeMode === 'auto'}
-          className={`p-1.5 rounded-md transition-all duration-150 ${
+          className={`p-1.5 rounded-md transition-all duration-150 focus:outline-none focus-visible:outline-none ${
             themeMode === 'auto'
-              ? 'bg-white dark:bg-zinc-700 text-zinc-950 dark:text-white shadow-xs'
-              : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white'
+              ? 'bg-white text-zinc-950 dark:bg-zinc-800 dark:text-zinc-100 shadow-xs border border-zinc-200/90 dark:border-zinc-700/60 font-medium'
+              : 'text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-200 border border-transparent'
           }`}
         >
           <Monitor className="w-3.5 h-3.5" />
@@ -109,17 +109,17 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
     {
       mode: 'light',
       label: 'Light',
-      icon: <Sun className="w-4 h-4 text-amber-500 dark:text-amber-400" />,
+      icon: <Sun className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />,
     },
     {
       mode: 'dark',
       label: 'Dark',
-      icon: <Moon className="w-4 h-4 text-indigo-500 dark:text-indigo-400" />,
+      icon: <Moon className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />,
     },
     {
       mode: 'auto',
       label: 'System',
-      icon: <Monitor className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />,
+      icon: <Monitor className="w-4 h-4 text-zinc-600 dark:text-zinc-400" />,
       hint: `Auto (${resolvedTheme})`,
     },
   ];
@@ -133,7 +133,7 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         title={getButtonTitle()}
         aria-expanded={isOpen}
         aria-haspopup="menu"
-        className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-zinc-400 dark:focus-visible:ring-zinc-600 flex items-center justify-center"
+        className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors focus:outline-none focus-visible:outline-none flex items-center justify-center border border-transparent"
       >
         {themeMode === 'auto' ? (
           <Monitor className="w-4 h-4" />
@@ -148,9 +148,9 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
         <div
           role="menu"
           aria-orientation="vertical"
-          className="absolute right-0 mt-2 w-38 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-zinc-950/5 dark:shadow-zinc-950/50 py-1 z-50 animate-in fade-in zoom-in-95 duration-100 focus:outline-none"
+          className="absolute right-0 mt-2 w-44 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-xl shadow-zinc-950/10 dark:shadow-zinc-950/60 py-1.5 z-50 animate-in fade-in zoom-in-95 duration-100 focus:outline-none"
         >
-          <div className="px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+          <div className="px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
             Theme
           </div>
           {options.map((option) => {
@@ -164,24 +164,26 @@ export const ThemeToggle: React.FC<ThemeToggleProps> = ({
                   setThemeMode(option.mode);
                   setIsOpen(false);
                 }}
-                className={`w-full text-left px-2.5 py-1.5 text-xs flex items-center justify-between transition-colors ${
+                className={`w-full text-left px-3 py-1.5 text-xs flex items-center justify-between whitespace-nowrap transition-colors focus:outline-none ${
                   isSelected
-                    ? 'font-medium text-zinc-950 dark:text-white bg-zinc-100/80 dark:bg-zinc-800/80'
+                    ? 'font-medium text-zinc-950 dark:text-white bg-zinc-100/90 dark:bg-zinc-800/90'
                     : 'text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-50 dark:hover:bg-zinc-800/40'
                 }`}
               >
                 <div className="flex items-center gap-2">
                   {option.icon}
                   <span>{option.label}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
                   {option.hint && (
-                    <span className="text-[10px] text-zinc-600 dark:text-zinc-400 font-mono">
+                    <span className="text-[10px] text-zinc-400 dark:text-zinc-500 font-mono">
                       {option.hint}
                     </span>
                   )}
+                  {isSelected && (
+                    <Check className="w-3.5 h-3.5 text-zinc-900 dark:text-white stroke-[2.5]" />
+                  )}
                 </div>
-                {isSelected && (
-                  <Check className="w-3.5 h-3.5 text-zinc-900 dark:text-white stroke-[2.5]" />
-                )}
               </button>
             );
           })}
