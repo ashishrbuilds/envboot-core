@@ -14,6 +14,7 @@ import { CiCdPage } from './pages/CiCdPage';
 import { ApiPage } from './pages/ApiPage';
 import { PlaygroundPage } from './pages/PlaygroundPage';
 import { ChangelogPage } from './pages/ChangelogPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 const AppShell: React.FC = () => {
   const location = useLocation();
@@ -51,8 +52,9 @@ const AppShell: React.FC = () => {
             }
           />
 
-          {/* Catch-all fallback */}
-          <Route path="*" element={<Navigate to="/" replace />} />
+          {/* 404 Catch-all fallback */}
+          <Route path="/404" element={<NotFoundPage />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
       {!isDocs && <Footer />}
