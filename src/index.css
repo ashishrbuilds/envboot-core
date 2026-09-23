@@ -4,17 +4,29 @@
 
 @layer base {
   :root {
-    --bg-page: #090d16;
-    --text-primary: #f8fafc;
-    --text-secondary: #94a3b8;
-    --border-subtle: #1e293b;
+    --bg-page: #09090b;
+    --text-primary: #fafafa;
+    --text-secondary: #a1a1aa;
+    --border-subtle: #27272a;
   }
 
   html.light {
     --bg-page: #ffffff;
-    --text-primary: #0f172a;
-    --text-secondary: #475569;
-    --border-subtle: #e2e8f0;
+    --text-primary: #09090b;
+    --text-secondary: #71717a;
+    --border-subtle: #e4e4e7;
+  }
+
+  /* Prevent CSS transitions during initial render / refresh to avoid button & color flashes */
+  html.preload,
+  html.preload *,
+  html.preload *::before,
+  html.preload *::after {
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
+    transition: none !important;
   }
 
   body {
@@ -34,11 +46,11 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #334155;
+    background: #3f3f46;
     border-radius: 9999px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: #475569;
+    background: #52525b;
   }
 }

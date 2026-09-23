@@ -21,9 +21,9 @@ export const DocsLayout: React.FC = () => {
         {/* Fumadocs Floating Ask AI button */}
         <button
           onClick={() => setAiModalOpen(true)}
-          className="fixed bottom-6 right-6 z-40 px-3.5 py-2 rounded-full bg-white hover:bg-zinc-100 text-zinc-800 border border-zinc-300 dark:bg-zinc-900/90 dark:hover:bg-zinc-800 dark:text-zinc-200 dark:border-zinc-700/80 shadow-2xl flex items-center gap-2 text-xs font-medium transition-all hover:scale-105"
+          className="fixed bottom-6 right-6 z-40 px-3.5 py-2 rounded-full bg-zinc-900 hover:bg-zinc-800 text-zinc-100 border border-zinc-700/80 shadow-2xl flex items-center gap-2 text-xs font-medium transition-transform duration-150 hover:scale-105 active:scale-95 select-none"
         >
-          <MessageSquare className="w-3.5 h-3.5 text-zinc-600 dark:text-zinc-400" />
+          <MessageSquare className="w-3.5 h-3.5 text-zinc-400" />
           <span>Ask AI</span>
         </button>
 
