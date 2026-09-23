@@ -16,14 +16,12 @@ import {
   ChevronsUpDown, 
   PanelLeft, 
   Github, 
-  Sun, 
-  Moon,
   Home,
   X,
   GitCommit
 } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
 import { SearchModal } from './SearchModal';
+import { ThemeToggle } from './ThemeToggle';
 
 interface NavItem {
   label: string;
@@ -53,7 +51,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
   onOpenSearch,
 }) => {
   const location = useLocation();
-  const { theme, toggleTheme } = useTheme();
   const [internalSearchOpen, setInternalSearchOpen] = useState(false);
   const [frameworkDropdownOpen, setFrameworkDropdownOpen] = useState(false);
 
@@ -278,20 +275,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <span className="text-[11px] font-medium text-zinc-600 dark:text-zinc-400">GitHub</span>
         </a>
 
-        <div className="flex items-center gap-1">
-          <button
-            onClick={toggleTheme}
-            aria-label="Toggle theme"
-            className="p-1.5 rounded-md hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors"
-            title="Toggle theme"
-          >
-            {theme === 'dark' ? (
-              <Sun className="w-4 h-4 text-zinc-300" />
-            ) : (
-              <Moon className="w-4 h-4 text-zinc-600" />
-            )}
-          </button>
-        </div>
+        <ThemeToggle variant="segmented" />
       </div>
     </>
   );

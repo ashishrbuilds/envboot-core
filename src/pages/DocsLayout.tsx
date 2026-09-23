@@ -2,14 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import { Sidebar } from '../components/Sidebar';
 import { SearchModal } from '../components/SearchModal';
-import { Menu, Search, Sun, Moon, PanelLeft } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
+import { Menu, Search, PanelLeft } from 'lucide-react';
+import { ThemeToggle } from '../components/ThemeToggle';
 
 export const DocsLayout: React.FC = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
-  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
 
   // Close mobile drawer on route or hash change
@@ -79,13 +78,7 @@ export const DocsLayout: React.FC = () => {
             <Search className="w-4 h-4" />
           </button>
 
-          <button
-            onClick={toggleTheme}
-            className="p-2 rounded-lg text-zinc-500 hover:text-zinc-950 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
-            aria-label="Toggle theme"
-          >
-            {theme === 'dark' ? <Sun className="w-4 h-4 text-zinc-300" /> : <Moon className="w-4 h-4 text-zinc-600" />}
-          </button>
+          <ThemeToggle />
         </div>
       </header>
 

@@ -2,18 +2,15 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
   Search, 
-  Sun, 
-  Moon, 
   Menu, 
   X, 
   Github, 
   Sparkles
 } from 'lucide-react';
-import { useTheme } from '../context/ThemeContext';
 import { SearchModal } from './SearchModal';
+import { ThemeToggle } from './ThemeToggle';
 
 export const Navbar: React.FC = () => {
-  const { theme, toggleTheme } = useTheme();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -121,18 +118,7 @@ export const Navbar: React.FC = () => {
             </a>
 
             {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              aria-label="Toggle theme"
-              className="p-1.5 rounded-lg text-zinc-500 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors"
-              title="Toggle theme"
-            >
-              {theme === 'dark' ? (
-                <Sun className="w-4 h-4 text-zinc-300" />
-              ) : (
-                <Moon className="w-4 h-4 text-zinc-600" />
-              )}
-            </button>
+            <ThemeToggle />
 
             {/* Mobile Menu Button */}
             <button
@@ -170,6 +156,11 @@ export const Navbar: React.FC = () => {
               <Sparkles className="w-4 h-4" />
               <span>Contract Playground</span>
             </Link>
+
+            <div className="pt-3 mt-2 border-t border-zinc-200 dark:border-zinc-800 flex items-center justify-between px-3">
+              <span className="text-xs text-zinc-500 dark:text-zinc-400 font-medium">Appearance</span>
+              <ThemeToggle variant="segmented" />
+            </div>
           </div>
         )}
       </header>
