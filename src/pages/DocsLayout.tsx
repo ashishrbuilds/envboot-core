@@ -37,6 +37,7 @@ export const DocsLayout: React.FC = () => {
     if (path.includes('frameworks')) return 'Frameworks';
     if (path.includes('ci-cd')) return 'CI/CD';
     if (path.includes('api')) return 'API';
+    if (path.includes('changelog')) return 'Changelog';
     return 'Docs';
   };
 

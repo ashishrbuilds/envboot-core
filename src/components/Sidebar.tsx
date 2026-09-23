@@ -19,7 +19,8 @@ import {
   Sun, 
   Moon,
   Home,
-  X
+  X,
+  GitCommit
 } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { SearchModal } from './SearchModal';
@@ -80,6 +81,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       items: [
         { label: 'Runtime API', path: '/docs/api', icon: <Code2 className="w-4 h-4 text-zinc-500 dark:text-zinc-400" /> },
         { label: 'Contract Playground', path: '/playground', icon: <Sparkles className="w-4 h-4 text-zinc-500 dark:text-zinc-400" /> },
+        { label: 'Release Changelog', path: '/docs/changelog', icon: <GitCommit className="w-4 h-4 text-zinc-500 dark:text-zinc-400" /> },
       ],
     },
   ];
@@ -199,6 +201,13 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 className="block px-2.5 py-1.5 rounded text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-950 dark:hover:text-white"
               >
                 Interactive Playground
+              </NavLink>
+              <NavLink
+                to="/docs/changelog"
+                onClick={() => { setFrameworkDropdownOpen(false); if (isMobile) onCloseMobile?.(); }}
+                className="block px-2.5 py-1.5 rounded text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 hover:text-zinc-950 dark:hover:text-white"
+              >
+                Release Changelog
               </NavLink>
               <NavLink
                 to="/"

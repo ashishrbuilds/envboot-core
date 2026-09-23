@@ -25,6 +25,7 @@ export const Navbar: React.FC = () => {
     { label: 'Frameworks', path: '/docs/frameworks' },
     { label: 'CI/CD', path: '/docs/ci-cd' },
     { label: 'API', path: '/docs/api' },
+    { label: 'Changelog', path: '/docs/changelog' },
   ];
 
   const isActive = (path: string) => {

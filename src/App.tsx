@@ -13,6 +13,7 @@ import { FrameworksPage } from './pages/FrameworksPage';
 import { CiCdPage } from './pages/CiCdPage';
 import { ApiPage } from './pages/ApiPage';
 import { PlaygroundPage } from './pages/PlaygroundPage';
+import { ChangelogPage } from './pages/ChangelogPage';
 
 const AppShell: React.FC = () => {
   const location = useLocation();
@@ -34,7 +35,11 @@ const AppShell: React.FC = () => {
             <Route path="frameworks" element={<FrameworksPage />} />
             <Route path="ci-cd" element={<CiCdPage />} />
             <Route path="api" element={<ApiPage />} />
+            <Route path="changelog" element={<ChangelogPage />} />
           </Route>
+
+          {/* Quick alias for /changelog */}
+          <Route path="/changelog" element={<Navigate to="/docs/changelog" replace />} />
 
           {/* Interactive Playground Route */}
           <Route

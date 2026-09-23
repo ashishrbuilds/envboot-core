@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, X, BookOpen, Terminal, Code2, Shield, Wrench, Scale } from 'lucide-react';
+import { Search, X, BookOpen, Terminal, Code2, Shield, Wrench, Scale, GitCommit } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 interface SearchResult {
@@ -115,6 +115,13 @@ const SEARCH_INDEX: SearchResult[] = [
     path: '/playground',
     icon: <Wrench className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />,
     keywords: ['playground', 'generator', 'simulator', 'builder', 'contract'],
+  },
+  {
+    title: 'Release Changelog (GitHub Sync)',
+    category: 'Ecosystem',
+    path: '/docs/changelog',
+    icon: <GitCommit className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />,
+    keywords: ['changelog', 'releases', 'version', 'github', 'notes', 'updates'],
   },
 ];
 
