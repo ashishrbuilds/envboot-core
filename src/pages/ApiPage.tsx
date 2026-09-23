@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CodeBlock } from '../components/CodeBlock';
 import { TableOfContents, TocItem } from '../components/TableOfContents';
+import { Seo } from '../components/Seo';
 import { ChevronRight, Copy, Check, ChevronDown } from 'lucide-react';
 
 const TOC_ITEMS: TocItem[] = [
@@ -22,6 +23,21 @@ export const ApiPage: React.FC = () => {
 
   return (
     <div className="flex gap-10 xl:gap-14 items-start w-full">
+      <Seo
+        title="Runtime API Reference (envboot.init, envboot.validate) — EnvBoot"
+        description="Detailed programmatic API documentation for envboot.init, envboot.validate, envboot.getContract, TypeScript types, and custom logger integration."
+        keywords={[
+          'envboot api',
+          'envboot.init',
+          'envboot.validate',
+          'runtime environment validation',
+          'typescript env types',
+          'InitOptions',
+          'ValidationResult',
+        ]}
+        canonicalPath="/docs/api"
+        type="article"
+      />
       <div className="flex-1 min-w-0 max-w-4xl xl:max-w-5xl space-y-10">
         
         {/* Header */}

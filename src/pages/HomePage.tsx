@@ -13,10 +13,45 @@ import {
 } from 'lucide-react';
 import { CodeBlock } from '../components/CodeBlock';
 import { TerminalSimulator } from '../components/TerminalSimulator';
+import { Seo } from '../components/Seo';
 
 export const HomePage: React.FC = () => {
   return (
     <div className="space-y-24 pb-20">
+      <Seo
+        title="EnvBoot — Zero-Runtime-Dependency Environment Contract & Validation"
+        description="Catch missing environment variables before your server starts or client mounts. Automated AST detection, CI drift protection, and zero runtime bloat for JavaScript & TypeScript."
+        keywords={[
+          'environment variables',
+          'env validation',
+          'dotenv alternative',
+          'zod env',
+          'envboot',
+          'zero runtime dependencies',
+          'ci drift',
+          'type-safe env',
+          'typescript',
+        ]}
+        canonicalPath="/"
+        jsonLd={{
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          name: 'EnvBoot',
+          operatingSystem: 'Node.js, Bun, Deno, Browser',
+          applicationCategory: 'DeveloperApplication',
+          description: 'Zero-runtime-dependency environment contract and validation tool for JavaScript and TypeScript projects.',
+          offers: {
+            '@type': 'Offer',
+            price: '0',
+            priceCurrency: 'USD',
+          },
+          url: 'https://ashishrbuilds.github.io/envboot',
+          author: {
+            '@type': 'Person',
+            name: 'Ashish Ranjan',
+          },
+        }}
+      />
       {/* Hero Section */}
       <section className="pt-12 sm:pt-20 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
         <div className="space-y-4">

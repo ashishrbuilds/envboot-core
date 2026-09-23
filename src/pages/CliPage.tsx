@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { TableOfContents, TocItem } from '../components/TableOfContents';
+import { Seo } from '../components/Seo';
 import { 
   ChevronRight, 
   Copy, 
@@ -35,6 +36,22 @@ export const CliPage: React.FC = () => {
 
   return (
     <div className="flex gap-10 xl:gap-14 items-start w-full">
+      <Seo
+        title="CLI Commands Reference (init, check, doctor, sync) — EnvBoot"
+        description="Comprehensive reference for the EnvBoot CLI. Learn all flags, options, exit codes, and automated CI recipes for init, check, doctor, and sync."
+        keywords={[
+          'envboot cli',
+          'envboot check',
+          'envboot doctor',
+          'envboot sync',
+          'env validation cli',
+          'strict mode',
+          'ci drift',
+          'cli commands',
+        ]}
+        canonicalPath="/docs/cli"
+        type="article"
+      />
       <div className="flex-1 min-w-0 max-w-4xl xl:max-w-5xl space-y-12">
         
         {/* Header */}

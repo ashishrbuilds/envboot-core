@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { CodeBlock } from '../components/CodeBlock';
 import { TableOfContents, TocItem } from '../components/TableOfContents';
+import { Seo } from '../components/Seo';
 import { 
   ShieldCheck, 
   AlertOctagon, 
@@ -30,6 +31,21 @@ export const CiCdPage: React.FC = () => {
 
   return (
     <div className="flex gap-10 xl:gap-14 items-start w-full">
+      <Seo
+        title="CI/CD Drift Protection & GitHub Actions — EnvBoot"
+        description="Automate environment variable validation in CI/CD pipelines. Detect drift, catch missing keys, and enforce zero credential leakage with envboot check."
+        keywords={[
+          'cicd env validation',
+          'github actions env check',
+          'env drift protection',
+          'secret masking',
+          'gitlab ci env',
+          'bitbucket pipelines',
+          'strict mode ci',
+        ]}
+        canonicalPath="/docs/ci-cd"
+        type="article"
+      />
       <div className="flex-1 min-w-0 max-w-4xl xl:max-w-5xl space-y-10">
         
         {/* Header */}

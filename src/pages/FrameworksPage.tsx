@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { CodeBlock } from '../components/CodeBlock';
 import { TableOfContents, TocItem } from '../components/TableOfContents';
+import { Seo } from '../components/Seo';
 import { 
   Layers, 
   Zap, 
@@ -43,6 +44,22 @@ export const FrameworksPage: React.FC = () => {
 
   return (
     <div className="flex gap-10 xl:gap-14 items-start w-full">
+      <Seo
+        title="Framework Integration Recipes (Next.js, Vite, Express, NestJS) — EnvBoot"
+        description="Step-by-step guides for integrating EnvBoot across Next.js (App & Pages Router), Vite React, Express, NestJS, Bun, and Deno with zero runtime overhead."
+        keywords={[
+          'envboot nextjs',
+          'envboot vite',
+          'envboot express',
+          'envboot nestjs',
+          'envboot bun',
+          'envboot deno',
+          'frontend env validation',
+          'framework recipes',
+        ]}
+        canonicalPath="/docs/frameworks"
+        type="article"
+      />
       <div className="flex-1 min-w-0 max-w-4xl xl:max-w-5xl space-y-10">
         
         {/* Breadcrumb & Header */}

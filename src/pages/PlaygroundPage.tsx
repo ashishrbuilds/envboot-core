@@ -11,6 +11,7 @@ import {
   Plus,
   Trash2
 } from 'lucide-react';
+import { Seo } from '../components/Seo';
 
 interface EnvVarItem {
   id: string;
@@ -131,6 +132,20 @@ export const PlaygroundPage: React.FC = () => {
 
   return (
     <div className="space-y-10 pb-16">
+      <Seo
+        title="Interactive Contract Playground — EnvBoot"
+        description="Test and generate .envboot.json contracts live in your browser. Parse .env files, simulate missing variables, test startup guards, and preview contract schemas."
+        keywords={[
+          'envboot playground',
+          'env schema generator',
+          'online env validator',
+          'interactive envboot',
+          'test env variables',
+          'generate .envboot.json',
+        ]}
+        canonicalPath="/playground"
+        type="website"
+      />
       <header className="space-y-3 pb-6 border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center gap-2">
           <div className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white">

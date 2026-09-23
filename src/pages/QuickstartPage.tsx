@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { TableOfContents, TocItem } from '../components/TableOfContents';
+import { Seo } from '../components/Seo';
 import { 
   Copy, 
   Check, 
@@ -51,6 +52,21 @@ export const QuickstartPage: React.FC = () => {
 
   return (
     <div className="flex gap-10 xl:gap-14 items-start w-full">
+      <Seo
+        title="Quick Start & Installation — EnvBoot Documentation"
+        description="Get started with EnvBoot in seconds. Scan your codebase with npx envboot init, generate .envboot.json contracts, and inject startup guards."
+        keywords={[
+          'envboot quickstart',
+          'envboot init',
+          'environment contract',
+          'startup guard injection',
+          'dotenv comparison',
+          'zero dependency env',
+          'install envboot',
+        ]}
+        canonicalPath="/docs/quickstart"
+        type="article"
+      />
       <div className="flex-1 min-w-0 max-w-4xl xl:max-w-5xl space-y-12">
         
         {/* Fumadocs Header */}
