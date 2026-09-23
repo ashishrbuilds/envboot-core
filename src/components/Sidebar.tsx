@@ -22,6 +22,7 @@ import {
 } from 'lucide-react';
 import { SearchModal } from './SearchModal';
 import { ThemeToggle } from './ThemeToggle';
+import envbootLogo from '../assets/logo';
 
 interface NavItem {
   label: string;
@@ -120,7 +121,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className="flex items-center gap-2.5 group"
           >
             <img
-              src="/envboot.png"
+              src={envbootLogo}
               alt="EnvBoot Logo"
               className="w-7 h-7 rounded-lg object-contain shadow-sm group-hover:scale-105 transition-transform"
             />

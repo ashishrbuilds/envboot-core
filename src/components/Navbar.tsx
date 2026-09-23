@@ -9,6 +9,7 @@ import {
 } from 'lucide-react';
 import { SearchModal } from './SearchModal';
 import { ThemeToggle } from './ThemeToggle';
+import envbootLogo from '../assets/logo';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
@@ -37,7 +38,7 @@ export const Navbar: React.FC = () => {
           <div className="flex items-center gap-3 shrink-0">
             <Link to="/" className="flex items-center gap-2.5 group">
               <img
-                src="/envboot.png"
+                src={envbootLogo}
                 alt="EnvBoot Logo"
                 className="w-8 h-8 rounded-lg object-contain shadow-sm group-hover:scale-105 transition-transform"
               />

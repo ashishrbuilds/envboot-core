@@ -4,6 +4,7 @@ import { Sidebar } from '../components/Sidebar';
 import { SearchModal } from '../components/SearchModal';
 import { Menu, Search, PanelLeft } from 'lucide-react';
 import { ThemeToggle } from '../components/ThemeToggle';
+import envbootLogo from '../assets/logo';
 
 export const DocsLayout: React.FC = () => {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
@@ -55,7 +56,7 @@ export const DocsLayout: React.FC = () => {
 
           <Link to="/" className="flex items-center gap-2 group">
             <img
-              src="/envboot.png"
+              src={envbootLogo}
               alt="EnvBoot Logo"
               className="w-7 h-7 rounded-lg object-contain shadow-sm"
             />

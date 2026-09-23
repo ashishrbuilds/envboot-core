@@ -1,6 +1,7 @@
 import React from 'react';
 import { ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import envbootLogo from '../assets/logo';
 
 export const Footer: React.FC = () => {
   return (
@@ -11,7 +12,7 @@ export const Footer: React.FC = () => {
           <div className="space-y-3 md:col-span-2">
             <div className="flex items-center gap-2">
               <img
-                src="/envboot.png"
+                src={envbootLogo}
                 alt="EnvBoot Logo"
                 className="w-5 h-5 rounded object-contain"
               />

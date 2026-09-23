@@ -10,7 +10,16 @@ export interface SeoProps {
   jsonLd?: Record<string, any>;
 }
 
-const BASE_URL = 'https://ashishrbuilds.github.io/envboot';
+const getBaseUrl = (): string => {
+  if (typeof window !== 'undefined' && window.location.origin) {
+    // If on GitHub Pages subpath like /envboot-core or /envboot
+    const pathname = window.location.pathname.replace(/\/$/, '');
+    return `${window.location.origin}${pathname}`;
+  }
+  return 'https://ashishrbuilds.github.io/envboot-core';
+};
+
+const BASE_URL = getBaseUrl();
 const DEFAULT_IMAGE = `${BASE_URL}/envboot.png`;
 
 export const Seo: React.FC<SeoProps> = ({
