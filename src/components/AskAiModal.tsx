@@ -84,21 +84,21 @@ export const AskAiModal: React.FC<AskAiModalProps> = ({ isOpen, onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
-      <div className="bg-[#0b101b] border border-slate-800 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
+      <div className="bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-2xl w-full max-w-xl shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-150">
         {/* Header */}
-        <div className="px-5 py-4 border-b border-slate-800 flex items-center justify-between">
+        <div className="px-5 py-4 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/20 text-amber-400">
+            <div className="p-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-100">
               <Bot className="w-4 h-4" />
             </div>
             <div>
-              <h2 className="text-sm font-bold text-slate-100">Ask EnvBoot AI</h2>
-              <p className="text-[11px] text-slate-400">Instant answers from official documentation</p>
+              <h2 className="text-sm font-bold text-zinc-950 dark:text-white">Ask EnvBoot AI</h2>
+              <p className="text-[11px] text-zinc-500 dark:text-zinc-400">Instant answers from official documentation</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className="p-1 rounded-md text-zinc-400 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -108,8 +108,8 @@ export const AskAiModal: React.FC<AskAiModalProps> = ({ isOpen, onClose }) => {
         <div className="p-5 space-y-4 max-h-[65vh] overflow-y-auto">
           {/* Pre-suggested questions */}
           <div>
-            <div className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
-              <Sparkles className="w-3 h-3 text-amber-400" />
+            <div className="text-[11px] font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-2 flex items-center gap-1.5 font-mono">
+              <Sparkles className="w-3 h-3 text-zinc-400 dark:text-zinc-500" />
               <span>Suggested Questions</span>
             </div>
             <div className="space-y-1.5">
@@ -117,10 +117,10 @@ export const AskAiModal: React.FC<AskAiModalProps> = ({ isOpen, onClose }) => {
                 <button
                   key={idx}
                   onClick={() => handleSelectPredefined(item)}
-                  className="w-full text-left text-xs px-3 py-2 rounded-lg bg-slate-900/60 hover:bg-slate-800/80 text-slate-300 border border-slate-800/80 hover:border-slate-700 transition-all flex items-center justify-between group"
+                  className="w-full text-left text-xs px-3 py-2 rounded-lg bg-zinc-50 hover:bg-zinc-100 text-zinc-800 border border-zinc-200 dark:bg-zinc-900/60 dark:hover:bg-zinc-800/80 dark:text-zinc-300 dark:border-zinc-800/80 hover:border-zinc-300 dark:hover:border-zinc-700 transition-all flex items-center justify-between group"
                 >
                   <span className="truncate pr-2">{item.q}</span>
-                  <ArrowRight className="w-3 h-3 text-slate-500 group-hover:text-amber-400 transition-colors shrink-0" />
+                  <ArrowRight className="w-3 h-3 text-zinc-400 group-hover:text-zinc-900 dark:group-hover:text-white transition-colors shrink-0" />
                 </button>
               ))}
             </div>
@@ -128,19 +128,19 @@ export const AskAiModal: React.FC<AskAiModalProps> = ({ isOpen, onClose }) => {
 
           {/* Answer Area */}
           {answer && (
-            <div className="p-4 rounded-xl bg-slate-900/90 border border-amber-500/20 space-y-2.5">
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-amber-400">
+            <div className="p-4 rounded-xl bg-zinc-100/70 dark:bg-zinc-900/90 border border-zinc-200 dark:border-zinc-800 space-y-2.5">
+              <div className="flex items-center gap-1.5 text-xs font-semibold text-zinc-900 dark:text-white">
                 <Bot className="w-3.5 h-3.5" />
                 <span>Answer</span>
               </div>
-              <p className="text-xs text-slate-200 leading-relaxed font-normal">{answer.a}</p>
+              <p className="text-xs text-zinc-700 dark:text-zinc-200 leading-relaxed font-normal">{answer.a}</p>
               {answer.link && (
                 <button
                   onClick={() => {
                     navigate(answer.link!);
                     onClose();
                   }}
-                  className="inline-flex items-center gap-1 text-xs text-amber-400 hover:text-amber-300 font-medium pt-1"
+                  className="inline-flex items-center gap-1 text-xs text-zinc-900 dark:text-white hover:underline font-medium pt-1"
                 >
                   <span>{answer.linkLabel || 'Learn more in documentation'}</span>
                   <ArrowRight className="w-3 h-3" />
@@ -151,17 +151,17 @@ export const AskAiModal: React.FC<AskAiModalProps> = ({ isOpen, onClose }) => {
         </div>
 
         {/* Query Input Footer */}
-        <form onSubmit={handleSubmit} className="p-3 border-t border-slate-800 bg-[#070a12] flex gap-2">
+        <form onSubmit={handleSubmit} className="p-3 border-t border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900/50 flex gap-2">
           <input
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Ask anything about EnvBoot..."
-            className="flex-1 bg-slate-900 border border-slate-700/80 rounded-lg px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-400/70"
+            className="flex-1 bg-white dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-700 rounded-lg px-3 py-2 text-xs text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 focus:outline-none focus:border-zinc-500 dark:focus:border-zinc-500"
           />
           <button
             type="submit"
-            className="px-3.5 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 text-amber-950 font-bold text-xs flex items-center gap-1.5 transition-colors"
+            className="px-3.5 py-2 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-950 font-bold text-xs flex items-center gap-1.5 transition-colors shadow-sm"
           >
             <Send className="w-3 h-3" />
             <span>Ask</span>

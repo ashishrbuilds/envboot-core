@@ -14,9 +14,7 @@ interface CodeBlockProps {
   language?: string;
   filename?: string;
   showLineNumbers?: boolean;
-  // Multi-tab code snippets (e.g. App Router vs Pages Router)
   tabs?: CodeTab[];
-  // Multi package manager variant
   pmCommands?: {
     npm: string;
     pnpm: string;
@@ -29,7 +27,7 @@ interface CodeBlockProps {
 function highlightLine(line: string) {
   const trimmed = line.trim();
   if (trimmed.startsWith('//') || trimmed.startsWith('#')) {
-    return <span className="text-slate-500 italic">{line}</span>;
+    return <span className="text-zinc-400 dark:text-zinc-500 italic">{line}</span>;
   }
 
   // Tokenize line using regex
@@ -45,21 +43,21 @@ function highlightLine(line: string) {
     }
     const token = match[0];
     if (token.startsWith('//')) {
-      parts.push(<span key={match.index} className="text-slate-500 italic">{token}</span>);
+      parts.push(<span key={match.index} className="text-zinc-400 dark:text-zinc-500 italic">{token}</span>);
     } else if (token.startsWith('"') || token.startsWith("'") || token.startsWith('`')) {
-      parts.push(<span key={match.index} className="text-emerald-400">{token}</span>);
+      parts.push(<span key={match.index} className="text-zinc-700 dark:text-zinc-300 font-normal">{token}</span>);
     } else if (
       ['import', 'from', 'export', 'default', 'function', 'return', 'const', 'let', 'var', 'await', 'async', 'if', 'else', 'type', 'interface', 'class', 'new'].includes(token)
     ) {
-      parts.push(<span key={match.index} className="text-purple-400 font-medium">{token}</span>);
+      parts.push(<span key={match.index} className="text-zinc-950 dark:text-white font-semibold">{token}</span>);
     } else if (['true', 'false', 'null', 'undefined'].includes(token)) {
-      parts.push(<span key={match.index} className="text-amber-400">{token}</span>);
+      parts.push(<span key={match.index} className="text-zinc-800 dark:text-zinc-200 font-semibold">{token}</span>);
     } else if (['React', 'ReactDOM', 'Response', 'RootLayout', 'AppModule', 'NestFactory', 'NextConfig'].includes(token)) {
-      parts.push(<span key={match.index} className="text-yellow-300 font-medium">{token}</span>);
+      parts.push(<span key={match.index} className="text-zinc-900 dark:text-zinc-100 font-medium">{token}</span>);
     } else if (['process', 'Bun', 'Deno', 'console', 'envboot', 'config'].includes(token)) {
-      parts.push(<span key={match.index} className="text-sky-300 font-semibold">{token}</span>);
+      parts.push(<span key={match.index} className="text-zinc-950 dark:text-white font-semibold">{token}</span>);
     } else {
-      parts.push(<span key={match.index} className="text-slate-400">{token}</span>);
+      parts.push(<span key={match.index} className="text-zinc-500 dark:text-zinc-400">{token}</span>);
     }
     lastIndex = regex.lastIndex;
   }
@@ -108,21 +106,21 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
   const lines = activeCode.trim().split('\n');
 
   return (
-    <div className="my-5 rounded-xl border border-slate-800 bg-[#090d16] dark:bg-[#090d16] light:bg-slate-950 overflow-hidden shadow-sm">
+    <div className="my-5 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-zinc-50/50 dark:bg-zinc-950 overflow-hidden shadow-sm">
       {/* Header bar */}
-      <div className="flex items-center justify-between px-3.5 py-2 bg-slate-900/90 dark:bg-slate-900/90 light:bg-slate-900 border-b border-slate-800/80">
+      <div className="flex items-center justify-between px-3.5 py-2 bg-zinc-100 dark:bg-zinc-900/90 border-b border-zinc-200 dark:border-zinc-800">
         {/* Left: Tabs or Filename */}
         {pmCommands ? (
           <div className="flex items-center gap-1">
-            <Terminal className="w-3.5 h-3.5 text-emerald-400 mr-1.5" />
+            <Terminal className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400 mr-1.5" />
             {(['npm', 'pnpm', 'yarn', 'bun', 'deno'] as PackageManager[]).map((pm) => (
               <button
                 key={pm}
                 onClick={() => setPackageManager(pm)}
                 className={`px-2.5 py-1 text-xs font-mono font-medium rounded-md transition-colors ${
                   packageManager === pm
-                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
+                    ? 'bg-zinc-200 text-zinc-950 dark:bg-zinc-800 dark:text-white border border-zinc-300 dark:border-zinc-700 font-semibold shadow-sm'
+                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/40'
                 }`}
               >
                 {pm}
@@ -137,24 +135,24 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
                 onClick={() => setActiveTabIdx(idx)}
                 className={`px-3 py-1 text-xs font-medium rounded-md transition-colors flex items-center gap-1.5 whitespace-nowrap ${
                   activeTabIdx === idx
-                    ? 'bg-slate-800 text-slate-100 font-semibold border border-slate-700/80'
-                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                    ? 'bg-zinc-200 text-zinc-950 dark:bg-zinc-800 dark:text-white font-semibold border border-zinc-300 dark:border-zinc-700 shadow-sm'
+                    : 'text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200 hover:bg-zinc-200/50 dark:hover:bg-zinc-800/40'
                 }`}
               >
-                <FileCode className="w-3.5 h-3.5 text-emerald-400" />
+                <FileCode className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
                 <span>{tab.title}</span>
               </button>
             ))}
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <FileCode className="w-3.5 h-3.5 text-emerald-400" />
+            <FileCode className="w-3.5 h-3.5 text-zinc-500 dark:text-zinc-400" />
             {activeFilename ? (
-              <span className="text-xs font-mono text-slate-300 font-medium">
+              <span className="text-xs font-mono text-zinc-700 dark:text-zinc-300 font-medium">
                 {activeFilename}
               </span>
             ) : (
-              <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-medium">
+              <span className="text-xs font-mono uppercase tracking-wider text-zinc-400 dark:text-zinc-500 font-medium">
                 {activeLang}
               </span>
             )}
@@ -165,12 +163,12 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
         <button
           onClick={handleCopy}
           aria-label="Copy code"
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors ml-2"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-zinc-500 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors ml-2"
         >
           {copied ? (
             <>
-              <Check className="w-3.5 h-3.5 text-emerald-400" />
-              <span className="text-emerald-400 font-medium">Copied!</span>
+              <Check className="w-3.5 h-3.5 text-zinc-900 dark:text-white" />
+              <span className="text-zinc-900 dark:text-white font-medium">Copied!</span>
             </>
           ) : (
             <>
@@ -182,17 +180,17 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
       </div>
 
       {/* Code with Line Numbers and Highlighting */}
-      <div className="p-4 overflow-x-auto text-[13px] font-mono leading-relaxed text-slate-200">
+      <div className="p-4 overflow-x-auto text-[13px] font-mono leading-relaxed text-zinc-800 dark:text-zinc-200">
         <div className="table w-full">
           {lines.map((line, idx) => (
-            <div key={idx} className="table-row hover:bg-slate-900/30 transition-colors">
+            <div key={idx} className="table-row hover:bg-zinc-100/50 dark:hover:bg-zinc-900/30 transition-colors">
               {showLineNumbers && !pmCommands && (
-                <span className="table-cell pr-4 select-none text-slate-600 text-right w-8 font-mono text-xs">
+                <span className="table-cell pr-4 select-none text-zinc-400 dark:text-zinc-600 text-right w-8 font-mono text-xs">
                   {idx + 1}
                 </span>
               )}
               {pmCommands && (
-                <span className="table-cell pr-3 select-none text-emerald-400 font-bold w-4">
+                <span className="table-cell pr-3 select-none text-zinc-500 dark:text-zinc-400 font-bold w-4">
                   $
                 </span>
               )}

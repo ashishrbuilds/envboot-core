@@ -58,10 +58,12 @@ export const PlaygroundPage: React.FC = () => {
       if (key && !seen.has(key)) {
         seen.add(key);
         let classification: 'required' | 'optional' | 'ignore' = 'required';
-        if (key === 'NODE_ENV' || key === 'TZ') classification = 'ignore';
-        else if (key.includes('OPTIONAL') || key.includes('SENTRY') || key.includes('REDIS')) {
+        if (key.includes('OPTIONAL') || key.includes('DEBUG') || key.includes('SENTRY')) {
           classification = 'optional';
+        } else if (key === 'NODE_ENV' || key === 'TZ') {
+          classification = 'ignore';
         }
+
         newVars.push({
           id: Math.random().toString(),
           name: key,
@@ -129,17 +131,17 @@ export const PlaygroundPage: React.FC = () => {
 
   return (
     <div className="space-y-10 pb-16">
-      <header className="space-y-3 pb-6 border-b border-slate-800">
+      <header className="space-y-3 pb-6 border-b border-zinc-200 dark:border-zinc-800">
         <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-emerald-400">
+          <div className="p-2 rounded-xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 text-zinc-900 dark:text-white">
             <Sparkles className="w-5 h-5" />
           </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-zinc-950 dark:text-white">
             Interactive Contract Playground
           </h1>
         </div>
-        <p className="text-base text-slate-300 max-w-3xl leading-relaxed">
-          Paste your environment variables, categorize required vs optional keys, generate <code className="font-mono text-emerald-400">.envboot.json</code>, and test runtime validation live.
+        <p className="text-base text-zinc-600 dark:text-zinc-400 max-w-3xl leading-relaxed">
+          Paste your environment variables, categorize required vs optional keys, generate <code className="font-mono text-zinc-900 dark:text-zinc-100 font-semibold">.envboot.json</code>, and test runtime validation live.
         </p>
       </header>
 
@@ -147,15 +149,15 @@ export const PlaygroundPage: React.FC = () => {
         {/* Left Column: Input and Variables Table */}
         <div className="lg:col-span-7 space-y-6">
           {/* Quick paste .env box */}
-          <div className="p-5 rounded-2xl border border-slate-800 bg-slate-950 space-y-3 shadow-sm">
+          <div className="p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3 shadow-sm">
             <div className="flex items-center justify-between">
-              <label className="text-sm font-semibold text-slate-200 flex items-center gap-2">
-                <FileCode className="w-4 h-4 text-emerald-400" />
+              <label className="text-sm font-semibold text-zinc-900 dark:text-zinc-200 flex items-center gap-2">
+                <FileCode className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
                 Paste .env Content
               </label>
               <button
                 onClick={handleParseEnvText}
-                className="px-3 py-1 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-semibold transition-colors"
+                className="px-3 py-1 rounded-lg bg-zinc-900 text-white hover:bg-zinc-800 dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-zinc-200 text-xs font-semibold transition-colors"
               >
                 Scan & Parse Variables
               </button>
@@ -164,23 +166,23 @@ export const PlaygroundPage: React.FC = () => {
               rows={4}
               value={envText}
               onChange={(e) => setEnvText(e.target.value)}
-              className="w-full font-mono text-xs p-3 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 focus:outline-none focus:border-emerald-500/60 leading-relaxed resize-none"
+              className="w-full font-mono text-xs p-3 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-300 dark:border-zinc-800 text-zinc-900 dark:text-zinc-200 focus:outline-none focus:border-zinc-500 leading-relaxed resize-none"
               placeholder="DATABASE_URL=...&#10;API_KEY=..."
             />
           </div>
 
           {/* Configured Variables */}
-          <div className="p-5 rounded-2xl border border-slate-800 bg-slate-950 space-y-4">
+          <div className="p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sliders className="w-4 h-4 text-cyan-400" />
-                <h2 className="text-sm font-bold text-slate-200">
+                <Sliders className="w-4 h-4 text-zinc-500 dark:text-zinc-400" />
+                <h2 className="text-sm font-bold text-zinc-900 dark:text-zinc-200">
                   Detected Variables ({vars.length})
                 </h2>
               </div>
               <button
                 onClick={addCustomVar}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-800 text-xs font-medium text-slate-300 transition-colors"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-900 dark:hover:bg-zinc-800 border border-zinc-200 dark:border-zinc-800 text-xs font-medium text-zinc-700 dark:text-zinc-300 transition-colors"
               >
                 <Plus className="w-3.5 h-3.5" />
                 Add Key
@@ -191,28 +193,24 @@ export const PlaygroundPage: React.FC = () => {
               {vars.map((v) => (
                 <div
                   key={v.id}
-                  className="p-3 rounded-xl border border-slate-800/80 bg-slate-900/60 flex flex-wrap items-center justify-between gap-3 text-xs"
+                  className="p-3 rounded-xl border border-zinc-200 dark:border-zinc-800/80 bg-zinc-50/60 dark:bg-zinc-900/60 flex flex-wrap items-center justify-between gap-3 text-xs"
                 >
-                  <div className="flex items-center gap-2 font-mono font-semibold text-slate-200 min-w-[160px]">
-                    <span className="w-2 h-2 rounded-full bg-slate-600"></span>
+                  <div className="flex items-center gap-2 font-mono font-semibold text-zinc-900 dark:text-zinc-200 min-w-[160px]">
+                    <span className="w-2 h-2 rounded-full bg-zinc-400 dark:bg-zinc-600"></span>
                     <span>{v.name}</span>
                   </div>
 
                   <div className="flex items-center gap-2">
                     {/* Classification Selector */}
-                    <div className="flex rounded-lg border border-slate-800 bg-slate-950 p-0.5 font-mono text-[11px]">
+                    <div className="flex rounded-lg border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-0.5 font-mono text-[11px]">
                       {(['required', 'optional', 'ignore'] as const).map((cat) => (
                         <button
                           key={cat}
                           onClick={() => updateClassification(v.id, cat)}
                           className={`px-2 py-0.5 rounded-md transition-colors ${
                             v.classification === cat
-                              ? cat === 'required'
-                                ? 'bg-emerald-500/20 text-emerald-400 font-bold'
-                                : cat === 'optional'
-                                ? 'bg-amber-500/20 text-amber-400 font-bold'
-                                : 'bg-slate-800 text-slate-300 font-bold'
-                              : 'text-slate-500 hover:text-slate-300'
+                              ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 font-bold shadow-sm'
+                              : 'text-zinc-500 hover:text-zinc-900 dark:hover:text-zinc-200'
                           }`}
                         >
                           {cat}
@@ -225,17 +223,17 @@ export const PlaygroundPage: React.FC = () => {
                       onClick={() => toggleIsSet(v.id)}
                       className={`px-2 py-1 rounded-lg border font-mono text-[11px] transition-colors flex items-center gap-1 ${
                         v.isSet
-                          ? 'bg-emerald-950/40 border-emerald-800/60 text-emerald-300'
-                          : 'bg-rose-950/40 border-rose-800/60 text-rose-300'
+                          ? 'bg-zinc-100 border-zinc-300 text-zinc-900 dark:bg-zinc-900 dark:border-zinc-700 dark:text-zinc-200'
+                          : 'bg-zinc-200/50 border-zinc-300 text-zinc-500 dark:bg-zinc-950 dark:border-zinc-800 dark:text-zinc-500 line-through'
                       }`}
                       title="Click to toggle variable present / missing in simulation"
                     >
-                      {v.isSet ? 'Present (Set)' : 'Missing (Empty)'}
+                      {v.isSet ? 'Present' : 'Missing'}
                     </button>
 
                     <button
                       onClick={() => removeVar(v.id)}
-                      className="p-1.5 text-slate-500 hover:text-rose-400 rounded-lg transition-colors"
+                      className="p-1.5 text-zinc-400 hover:text-zinc-900 dark:hover:text-white rounded-lg transition-colors"
                       title="Delete variable"
                     >
                       <Trash2 className="w-3.5 h-3.5" />
@@ -247,7 +245,7 @@ export const PlaygroundPage: React.FC = () => {
 
             <button
               onClick={runSimulation}
-              className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-emerald-950 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-500/10"
+              className="w-full py-2.5 rounded-xl bg-zinc-900 hover:bg-zinc-800 text-white dark:bg-white dark:hover:bg-zinc-200 dark:text-zinc-950 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm"
             >
               <Play className="w-3.5 h-3.5 fill-current" />
               Simulate Validation Check
@@ -259,40 +257,40 @@ export const PlaygroundPage: React.FC = () => {
             <div
               className={`p-5 rounded-2xl border ${
                 simulatedResult.valid
-                  ? 'border-emerald-500/40 bg-emerald-950/20'
-                  : 'border-rose-500/40 bg-rose-950/20'
+                  ? 'border-zinc-300 dark:border-zinc-700 bg-zinc-100/70 dark:bg-zinc-900/40'
+                  : 'border-zinc-400 dark:border-zinc-600 bg-zinc-200/50 dark:bg-zinc-900/60'
               } space-y-3 font-mono text-xs`}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2 font-bold text-sm">
                   {simulatedResult.valid ? (
                     <>
-                      <CheckCircle2 className="w-5 h-5 text-emerald-400" />
-                      <span className="text-emerald-400">STARTUP PERMITTED (PASSED)</span>
+                      <CheckCircle2 className="w-5 h-5 text-zinc-900 dark:text-white" />
+                      <span className="text-zinc-950 dark:text-white">STARTUP PERMITTED (PASSED)</span>
                     </>
                   ) : (
                     <>
-                      <XCircle className="w-5 h-5 text-rose-400" />
-                      <span className="text-rose-400">STARTUP ABORTED (FAILED)</span>
+                      <XCircle className="w-5 h-5 text-zinc-900 dark:text-white" />
+                      <span className="text-zinc-950 dark:text-white">STARTUP ABORTED (FAILED)</span>
                     </>
                   )}
                 </div>
-                <span className="text-[11px] text-slate-400">Exit code: {simulatedResult.valid ? '0' : '1'}</span>
+                <span className="text-[11px] text-zinc-500">Exit code: {simulatedResult.valid ? '0' : '1'}</span>
               </div>
 
-              <div className="text-slate-300 space-y-1">
+              <div className="text-zinc-700 dark:text-zinc-300 space-y-1">
                 {simulatedResult.valid ? (
-                  <div>All required variables are present. Dev server or client app boots cleanly.</div>
+                  <div>All required variables are present. Application boots cleanly.</div>
                 ) : (
                   <div>
                     Fatal startup crash prevented! Missing required key(s):{' '}
-                    <span className="text-rose-300 font-bold">
+                    <span className="text-zinc-950 dark:text-white font-bold underline">
                       {simulatedResult.missingRequired.join(', ')}
                     </span>
                   </div>
                 )}
                 {simulatedResult.missingOptional.length > 0 && (
-                  <div className="text-amber-400 text-[11px]">
+                  <div className="text-zinc-500 text-[11px]">
                     Note: Missing optional variables (non-fatal): {simulatedResult.missingOptional.join(', ')}
                   </div>
                 )}
@@ -304,19 +302,19 @@ export const PlaygroundPage: React.FC = () => {
         {/* Right Column: Generated Contract & Code */}
         <div className="lg:col-span-5 space-y-6">
           {/* Generated .envboot.json */}
-          <div className="p-5 rounded-2xl border border-slate-800 bg-slate-950 space-y-3 shadow-sm">
+          <div className="p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold text-slate-200">
+              <span className="text-xs font-mono font-bold text-zinc-900 dark:text-zinc-200">
                 Generated .envboot.json
               </span>
               <button
                 onClick={copyConfig}
-                className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-mono text-slate-400 hover:text-slate-200 hover:bg-slate-900 border border-slate-800 transition-colors"
+                className="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-mono text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-white hover:bg-zinc-100 dark:hover:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 transition-colors"
               >
                 {copiedConfig ? (
                   <>
-                    <Check className="w-3 h-3 text-emerald-400" />
-                    <span className="text-emerald-400">Copied</span>
+                    <Check className="w-3 h-3 text-zinc-950 dark:text-white" />
+                    <span className="text-zinc-950 dark:text-white font-medium">Copied</span>
                   </>
                 ) : (
                   <>
@@ -327,24 +325,24 @@ export const PlaygroundPage: React.FC = () => {
               </button>
             </div>
 
-            <pre className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 font-mono text-xs text-emerald-300 overflow-x-auto leading-relaxed">
+            <pre className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 font-mono text-xs text-zinc-800 dark:text-zinc-200 overflow-x-auto leading-relaxed">
               <code>{generatedJson}</code>
             </pre>
           </div>
 
           {/* Startup Code Preview */}
-          <div className="p-5 rounded-2xl border border-slate-800 bg-slate-950 space-y-3 shadow-sm">
+          <div className="p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 space-y-3 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-mono font-bold text-slate-200">
+              <span className="text-xs font-mono font-bold text-zinc-900 dark:text-zinc-200">
                 Entrypoint Guard Code
               </span>
-              <div className="flex rounded-lg border border-slate-800 bg-slate-900 p-0.5 font-mono text-[11px]">
+              <div className="flex rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 p-0.5 font-mono text-[11px]">
                 <button
                   onClick={() => setActiveTab('node')}
                   className={`px-2 py-0.5 rounded-md ${
                     activeTab === 'node'
-                      ? 'bg-emerald-500/20 text-emerald-400 font-bold'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 font-bold shadow-sm'
+                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
                   }`}
                 >
                   Node.js / Bun
@@ -353,8 +351,8 @@ export const PlaygroundPage: React.FC = () => {
                   onClick={() => setActiveTab('vite')}
                   className={`px-2 py-0.5 rounded-md ${
                     activeTab === 'vite'
-                      ? 'bg-emerald-500/20 text-emerald-400 font-bold'
-                      : 'text-slate-400 hover:text-slate-200'
+                      ? 'bg-zinc-900 text-white dark:bg-white dark:text-zinc-950 font-bold shadow-sm'
+                      : 'text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-200'
                   }`}
                 >
                   Vite / React
@@ -362,7 +360,7 @@ export const PlaygroundPage: React.FC = () => {
               </div>
             </div>
 
-            <pre className="p-4 rounded-xl bg-slate-900 border border-slate-800/80 font-mono text-xs text-slate-300 overflow-x-auto leading-relaxed">
+            <pre className="p-4 rounded-xl bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800/80 font-mono text-xs text-zinc-800 dark:text-zinc-300 overflow-x-auto leading-relaxed">
               {activeTab === 'node' ? (
                 <code>{`import envboot from "envboot";
 

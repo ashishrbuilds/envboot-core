@@ -4,6 +4,7 @@ import { ThemeProvider } from './context/ThemeContext';
 import { PackageManagerProvider } from './context/PackageManagerContext';
 import { Navbar } from './components/Navbar';
 import { Footer } from './components/Footer';
+import { ScrollToAnchor } from './components/ScrollToAnchor';
 import { HomePage } from './pages/HomePage';
 import { DocsLayout } from './pages/DocsLayout';
 import { QuickstartPage } from './pages/QuickstartPage';
@@ -18,7 +19,8 @@ const AppShell: React.FC = () => {
   const isDocs = location.pathname.startsWith('/docs');
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090d16] text-slate-100 dark:bg-[#090d16] dark:text-slate-100 light:bg-white light:text-slate-900 selection:bg-emerald-500/20 selection:text-emerald-300">
+    <div className="min-h-screen flex flex-col bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 selection:bg-zinc-800 selection:text-white dark:selection:bg-zinc-200 dark:selection:text-zinc-950">
+      <ScrollToAnchor />
       {!isDocs && <Navbar />}
       <div className="flex-1">
         <Routes>
