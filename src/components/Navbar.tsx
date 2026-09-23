@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { 
-  ShieldCheck, 
   Search, 
   Sun, 
   Moon, 
@@ -40,9 +39,11 @@ export const Navbar: React.FC = () => {
           {/* Brand Identity: Logo + Name + Version Badge */}
           <div className="flex items-center gap-3 shrink-0">
             <Link to="/" className="flex items-center gap-2.5 group">
-              <div className="w-8 h-8 rounded-lg bg-zinc-900 dark:bg-zinc-800 border border-zinc-700/80 flex items-center justify-center text-white transition-all shadow-sm">
-                <ShieldCheck className="w-4.5 h-4.5 text-white" />
-              </div>
+              <img
+                src="/envboot.png"
+                alt="EnvBoot Logo"
+                className="w-8 h-8 rounded-lg object-contain shadow-sm group-hover:scale-105 transition-transform"
+              />
               <span className="text-base font-bold tracking-tight text-zinc-950 dark:text-white">
                 EnvBoot
               </span>

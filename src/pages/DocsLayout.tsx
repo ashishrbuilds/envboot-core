@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, useLocation, Link } from 'react-router-dom';
 import { Sidebar } from '../components/Sidebar';
 import { SearchModal } from '../components/SearchModal';
-import { Menu, Search, Sun, Moon, PanelLeft, ShieldCheck } from 'lucide-react';
+import { Menu, Search, Sun, Moon, PanelLeft } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 
 export const DocsLayout: React.FC = () => {
@@ -55,9 +55,11 @@ export const DocsLayout: React.FC = () => {
           </button>
 
           <Link to="/" className="flex items-center gap-2 group">
-            <div className="w-7 h-7 rounded-lg bg-zinc-900 dark:bg-zinc-800 border border-zinc-700/80 flex items-center justify-center text-white shadow-sm">
-              <ShieldCheck className="w-4 h-4 text-white" />
-            </div>
+            <img
+              src="/envboot.png"
+              alt="EnvBoot Logo"
+              className="w-7 h-7 rounded-lg object-contain shadow-sm"
+            />
             <span className="font-bold text-sm tracking-tight text-zinc-950 dark:text-white">
               EnvBoot
             </span>

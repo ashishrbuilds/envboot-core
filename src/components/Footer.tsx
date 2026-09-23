@@ -1,5 +1,5 @@
 import React from 'react';
-import { ShieldCheck, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 export const Footer: React.FC = () => {
@@ -10,7 +10,11 @@ export const Footer: React.FC = () => {
           {/* Brand */}
           <div className="space-y-3 md:col-span-2">
             <div className="flex items-center gap-2">
-              <ShieldCheck className="w-5 h-5 text-zinc-900 dark:text-white" />
+              <img
+                src="/envboot.png"
+                alt="EnvBoot Logo"
+                className="w-5 h-5 rounded object-contain"
+              />
               <span className="text-base font-bold text-zinc-950 dark:text-white">
                 EnvBoot
               </span>

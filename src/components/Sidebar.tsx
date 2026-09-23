@@ -122,9 +122,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
             onClick={() => { if (isMobile) onCloseMobile?.(); }}
             className="flex items-center gap-2.5 group"
           >
-            <div className="w-7 h-7 rounded-lg bg-zinc-900 dark:bg-zinc-800 border border-zinc-700/80 flex items-center justify-center text-zinc-100 shadow-sm">
-              <ShieldCheck className="w-4 h-4 text-zinc-100" />
-            </div>
+            <img
+              src="/envboot.png"
+              alt="EnvBoot Logo"
+              className="w-7 h-7 rounded-lg object-contain shadow-sm group-hover:scale-105 transition-transform"
+            />
             <span className="font-bold text-sm text-zinc-950 dark:text-zinc-100 tracking-tight group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition-colors">
               EnvBoot
             </span>

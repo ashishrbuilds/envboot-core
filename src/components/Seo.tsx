@@ -11,7 +11,7 @@ export interface SeoProps {
 }
 
 const BASE_URL = 'https://ashishrbuilds.github.io/envboot';
-const DEFAULT_IMAGE = `${BASE_URL}/og-image.png`;
+const DEFAULT_IMAGE = `${BASE_URL}/envboot.png`;
 
 export const Seo: React.FC<SeoProps> = ({
   title,
