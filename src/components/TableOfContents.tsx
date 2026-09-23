@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { AlignLeft } from 'lucide-react';
 
 export interface TocItem {
   id: string;
@@ -11,32 +12,62 @@ interface TableOfContentsProps {
 }
 
 export const TableOfContents: React.FC<TableOfContentsProps> = ({ items }) => {
+  const [activeId, setActiveId] = useState<string>(items[0]?.id || '');
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollY = window.scrollY;
+      for (const item of items) {
+        const el = document.getElementById(item.id);
+        if (el) {
+          const top = el.offsetTop - 120;
+          const height = el.offsetHeight;
+          if (scrollY >= top && scrollY < top + height) {
+            setActiveId(item.id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [items]);
+
   if (!items || items.length === 0) return null;
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
+      setActiveId(id);
     }
   };
 
   return (
-    <div className="hidden xl:block w-56 shrink-0 sticky top-24 h-[calc(100vh-8rem)] overflow-y-auto pl-6 border-l border-slate-800/60 text-xs">
-      <div className="font-semibold text-slate-300 uppercase tracking-wider font-mono text-[11px] mb-3">
-        On This Page
+    <div className="hidden xl:block w-60 shrink-0 sticky top-10 h-[calc(100vh-5rem)] overflow-y-auto pl-4 text-xs select-none">
+      <div className="flex items-center gap-2 text-slate-400 font-medium text-xs mb-3">
+        <AlignLeft className="w-3.5 h-3.5 text-slate-500" />
+        <span>On this page</span>
       </div>
-      <nav className="space-y-2">
-        {items.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => scrollTo(item.id)}
-            className={`block text-left w-full text-slate-400 hover:text-emerald-400 transition-colors leading-snug ${
-              item.level === 3 ? 'pl-3 text-[11px] text-slate-500' : ''
-            }`}
-          >
-            {item.label}
-          </button>
-        ))}
+
+      <nav className="border-l border-slate-800 ml-1.5 pl-3 space-y-2.5">
+        {items.map((item) => {
+          const isActive = activeId === item.id;
+          return (
+            <button
+              key={item.id}
+              onClick={() => scrollTo(item.id)}
+              className={`block text-left w-full transition-all leading-snug relative ${
+                isActive
+                  ? 'text-amber-400 font-semibold before:absolute before:-left-[14px] before:top-0.5 before:bottom-0.5 before:w-[2px] before:bg-amber-400'
+                  : 'text-slate-400 hover:text-slate-200'
+              } ${item.level === 3 ? 'pl-2 text-[11px] text-slate-500' : ''}`}
+            >
+              {item.label}
+            </button>
+          );
+        })}
       </nav>
     </div>
   );
