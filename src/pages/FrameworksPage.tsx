@@ -1,40 +1,106 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { CodeBlock } from '../components/CodeBlock';
 import { Callout } from '../components/Callout';
 import { TableOfContents, TocItem } from '../components/TableOfContents';
+import { 
+  Layers, 
+  Zap, 
+  Server, 
+  ShieldCheck, 
+  Cpu,
+  ChevronRight
+} from 'lucide-react';
 
 const TOC_ITEMS: TocItem[] = [
-  { id: 'nextjs', label: 'Next.js (App & Pages Router)' },
-  { id: 'vite', label: 'Vite & Frontend (React/Vue/Svelte)' },
-  { id: 'express', label: 'Express, Fastify & Koa' },
+  { id: 'nextjs', label: 'Next.js (App & Pages)' },
+  { id: 'vite', label: 'Vite & Browser Frontend' },
+  { id: 'express', label: 'Express & Fastify' },
   { id: 'nestjs', label: 'NestJS' },
   { id: 'bun-deno', label: 'Bun & Deno Runtimes' },
 ];
 
 export const FrameworksPage: React.FC = () => {
+  const [selectedFramework, setSelectedFramework] = useState<string>('all');
+
+  const frameworks = [
+    { id: 'all', label: 'All Frameworks', icon: <Layers className="w-3.5 h-3.5" /> },
+    { id: 'nextjs', label: 'Next.js', icon: <Zap className="w-3.5 h-3.5 text-slate-100" /> },
+    { id: 'vite', label: 'Vite / React', icon: <Zap className="w-3.5 h-3.5 text-cyan-400" /> },
+    { id: 'express', label: 'Express / Fastify', icon: <Server className="w-3.5 h-3.5 text-emerald-400" /> },
+    { id: 'nestjs', label: 'NestJS', icon: <ShieldCheck className="w-3.5 h-3.5 text-rose-400" /> },
+    { id: 'bun-deno', label: 'Bun & Deno', icon: <Cpu className="w-3.5 h-3.5 text-amber-400" /> },
+  ];
+
   return (
     <div className="flex gap-10">
-      <div className="flex-1 min-w-0 space-y-12">
-        <header className="space-y-3 pb-6 border-b border-slate-800">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
-            Framework Integration Recipes
-          </h1>
-          <p className="text-base text-slate-300 max-w-2xl leading-relaxed">
-            Production-ready recipes for injecting EnvBoot guards across modern full-stack frameworks, frontend bundlers, and backend servers.
-          </p>
+      <div className="flex-1 min-w-0 space-y-10">
+        
+        {/* Breadcrumb & Header */}
+        <header className="space-y-4 pb-6 border-b border-slate-800/80">
+          <div className="flex items-center gap-1.5 text-xs font-mono text-slate-500">
+            <span>Docs</span>
+            <ChevronRight className="w-3 h-3 text-slate-600" />
+            <span className="text-slate-300 font-medium">Frameworks</span>
+          </div>
+
+          <div className="space-y-2">
+            <h1 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+              Framework Integration Recipes
+            </h1>
+            <p className="text-sm sm:text-base text-slate-300 max-w-2xl leading-relaxed">
+              Step-by-step implementation patterns for injecting EnvBoot guards into full-stack frameworks, client bundlers, and backend APIs.
+            </p>
+          </div>
+
+          {/* Interactive Framework Filter Tabs */}
+          <div className="flex items-center gap-1.5 overflow-x-auto pt-2 pb-1">
+            {frameworks.map((fw) => (
+              <button
+                key={fw.id}
+                onClick={() => setSelectedFramework(fw.id)}
+                className={`whitespace-nowrap px-3 py-1.5 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-all ${
+                  selectedFramework === fw.id
+                    ? 'bg-emerald-500/15 text-emerald-300 border border-emerald-500/40 shadow-sm'
+                    : 'text-slate-400 hover:text-slate-200 bg-slate-900/60 hover:bg-slate-800/60 border border-slate-800'
+                }`}
+              >
+                {fw.icon}
+                <span>{fw.label}</span>
+              </button>
+            ))}
+          </div>
         </header>
 
-        {/* Next.js */}
-        <section id="nextjs" className="space-y-4">
-          <h2 className="text-2xl font-bold text-slate-100">Next.js (App Router & Pages Router)</h2>
-          <p className="text-sm text-slate-300 leading-relaxed">
-            In Next.js, initialize EnvBoot at the top of your root layout or entry configuration:
-          </p>
+        {/* 1. Next.js Section */}
+        {(selectedFramework === 'all' || selectedFramework === 'nextjs') && (
+          <section id="nextjs" className="p-6 rounded-2xl border border-slate-800 bg-slate-950/60 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-100">
+                  <Zap className="w-4 h-4 text-slate-100" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Next.js</h2>
+                  <p className="text-xs text-slate-400">App Router, Pages Router & Build Guard</p>
+                </div>
+              </div>
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-slate-900 border border-slate-800 text-slate-400">
+                Full-Stack
+              </span>
+            </div>
 
-          <CodeBlock
-            language="tsx"
-            filename="src/app/layout.tsx (App Router)"
-            code={`import envboot from "envboot";
+            <p className="text-sm text-slate-300 leading-relaxed">
+              In Next.js, initialize EnvBoot before server components render or layout trees mount. 
+              Choose between runtime layout validation or build-time config guards:
+            </p>
+
+            <CodeBlock
+              tabs={[
+                {
+                  title: 'App Router (layout.tsx)',
+                  filename: 'src/app/layout.tsx',
+                  language: 'tsx',
+                  code: `import envboot from "envboot";
 
 // Verify environment before layout renders or server components mount
 envboot.init();
@@ -45,45 +111,76 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>{children}</body>
     </html>
   );
-}`}
-          />
+}`,
+                },
+                {
+                  title: 'Pages Router (_app.tsx)',
+                  filename: 'src/pages/_app.tsx',
+                  language: 'tsx',
+                  code: `import envboot from "envboot";
+import type { AppProps } from "next/app";
 
-          <p className="text-sm text-slate-300 leading-relaxed pt-2">
-            Alternatively, to guard the Next.js compilation step before webpack/turbopack starts:
-          </p>
+// Guard startup before page tree renders
+envboot.init();
 
-          <CodeBlock
-            language="javascript"
-            filename="next.config.mjs"
-            code={`import envboot from "envboot";
+export default function MyApp({ Component, pageProps }: AppProps) {
+  return <Component {...pageProps} />;
+}`,
+                },
+                {
+                  title: 'Build Guard (next.config.mjs)',
+                  filename: 'next.config.mjs',
+                  language: 'javascript',
+                  code: `import envboot from "envboot";
 
-// Halt next build if environment variables are missing
+// Halt "next build" if environment variables are missing
 envboot.init();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // your configuration
+  reactStrictMode: true,
 };
 
-export default nextConfig;`}
-          />
-        </section>
+export default nextConfig;`,
+                },
+              ]}
+            />
+          </section>
+        )}
 
-        {/* Vite & Frontend */}
-        <section id="vite" className="space-y-4">
-          <h2 className="text-2xl font-bold text-slate-100">Vite & Frontend (React / Vue / Svelte)</h2>
-          <p className="text-sm text-slate-300 leading-relaxed">
-            Browsers cannot access Node.js <code className="font-mono text-cyan-300">process.exit</code>. 
-            EnvBoot provides a dedicated, lightweight browser bundle (<code className="font-mono text-emerald-400">envboot/browser</code>) that validates client variables (<code className="font-mono text-cyan-300">import.meta.env</code>) and throws a fatal error overlay before frontend apps mount:
-          </p>
+        {/* 2. Vite & Frontend Section */}
+        {(selectedFramework === 'all' || selectedFramework === 'vite') && (
+          <section id="vite" className="p-6 rounded-2xl border border-slate-800 bg-slate-950/60 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-cyan-950/30 border border-cyan-800/40 text-cyan-400">
+                  <Zap className="w-4 h-4 text-cyan-400" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Vite & Browser Frontend</h2>
+                  <p className="text-xs text-slate-400">React, Vue, Svelte (Client Bundles)</p>
+                </div>
+              </div>
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-cyan-950/40 border border-cyan-800/40 text-cyan-300">
+                Browser Safe
+              </span>
+            </div>
 
-          <CodeBlock
-            language="tsx"
-            filename="src/main.tsx"
-            code={`import envboot from "envboot/browser";
+            <p className="text-sm text-slate-300 leading-relaxed">
+              Browser environments cannot call Node.js <code className="font-mono text-cyan-300">process.exit()</code>. 
+              Import <code className="font-mono text-emerald-400">envboot/browser</code> to validate client variables (<code className="font-mono text-cyan-300">import.meta.env</code>) and throw fatal runtime errors before mounting React:
+            </p>
+
+            <CodeBlock
+              tabs={[
+                {
+                  title: 'src/main.tsx',
+                  filename: 'src/main.tsx',
+                  language: 'tsx',
+                  code: `import envboot from "envboot/browser";
 import contract from "../.envboot.json";
 
-// Guard frontend environment
+// Guard frontend environment before React mounts
 envboot.init({
   config: contract,
   env: import.meta.env,
@@ -98,30 +195,60 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <App />
   </React.StrictMode>
-);`}
-          />
+);`,
+                },
+                {
+                  title: 'package.json (Fail-Fast)',
+                  filename: 'package.json',
+                  language: 'json',
+                  code: `{
+  "scripts": {
+    "dev": "envboot check && vite",
+    "build": "envboot check && tsc -b && vite build"
+  }
+}`,
+                },
+              ]}
+            />
 
-          <Callout type="tip" title="Build Guard in package.json">
-            Prepend <code className="font-mono text-emerald-400">envboot check</code> to your Vite dev and build scripts:
-            <code className="block mt-1 font-mono text-xs bg-slate-900/60 p-2 rounded border border-slate-800 text-emerald-300">
-              "dev": "envboot check && vite", "build": "envboot check && tsc -b && vite build"
-            </code>
-          </Callout>
-        </section>
+            <Callout type="tip" title="Pre-Bundling Protection">
+              Prepend <code className="font-mono text-emerald-400">envboot check</code> to your dev and build scripts. 
+              This prevents Vite from even launching when required variables are missing from your local <code className="font-mono text-slate-300">.env</code>.
+            </Callout>
+          </section>
+        )}
 
-        {/* Express / Fastify / Koa */}
-        <section id="express" className="space-y-4">
-          <h2 className="text-2xl font-bold text-slate-100">Express, Fastify & Koa</h2>
-          <p className="text-sm text-slate-300 leading-relaxed">
-            Place the guard at the very top of your server file before importing database drivers or listening on ports:
-          </p>
+        {/* 3. Express, Fastify & Koa Section */}
+        {(selectedFramework === 'all' || selectedFramework === 'express') && (
+          <section id="express" className="p-6 rounded-2xl border border-slate-800 bg-slate-950/60 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-emerald-950/30 border border-emerald-800/40 text-emerald-400">
+                  <Server className="w-4 h-4 text-emerald-400" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Express & Fastify</h2>
+                  <p className="text-xs text-slate-400">Node.js HTTP Server & Microservices</p>
+                </div>
+              </div>
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-emerald-950/40 border border-emerald-800/40 text-emerald-300">
+                Backend
+              </span>
+            </div>
 
-          <CodeBlock
-            language="typescript"
-            filename="src/index.ts (Express)"
-            code={`import envboot from "envboot";
+            <p className="text-sm text-slate-300 leading-relaxed">
+              Place the guard at the very top of your entry file before establishing database connections or binding socket listeners:
+            </p>
 
-// Halts with exit code 1 immediately if DATABASE_URL or PORT are missing
+            <CodeBlock
+              tabs={[
+                {
+                  title: 'Express (TypeScript)',
+                  filename: 'src/server.ts',
+                  language: 'typescript',
+                  code: `import envboot from "envboot";
+
+// Halts process immediately with exit code 1 if DATABASE_URL or PORT are missing
 envboot.init();
 
 import express from "express";
@@ -133,22 +260,57 @@ const port = process.env.PORT || 3000;
 await connectDatabase(process.env.DATABASE_URL!);
 
 app.listen(port, () => {
-  console.log(\`Server running on http://localhost:\${port}\`);
-});`}
-          />
-        </section>
+  console.log(\`Server listening on http://localhost:\${port}\`);
+});`,
+                },
+                {
+                  title: 'Fastify',
+                  filename: 'src/app.ts',
+                  language: 'typescript',
+                  code: `import envboot from "envboot";
+import Fastify from "fastify";
 
-        {/* NestJS */}
-        <section id="nestjs" className="space-y-4">
-          <h2 className="text-2xl font-bold text-slate-100">NestJS</h2>
-          <p className="text-sm text-slate-300 leading-relaxed">
-            In NestJS applications, invoke <code className="font-mono text-emerald-400">envboot.init()</code> in <code className="font-mono text-slate-300">src/main.ts</code> before creating the application factory:
-          </p>
+envboot.init();
 
-          <CodeBlock
-            language="typescript"
-            filename="src/main.ts"
-            code={`import envboot from "envboot";
+const fastify = Fastify({ logger: true });
+
+fastify.get("/", async (req, reply) => {
+  return { status: "ok" };
+});
+
+await fastify.listen({ port: Number(process.env.PORT) || 3000 });`,
+                },
+              ]}
+            />
+          </section>
+        )}
+
+        {/* 4. NestJS Section */}
+        {(selectedFramework === 'all' || selectedFramework === 'nestjs') && (
+          <section id="nestjs" className="p-6 rounded-2xl border border-slate-800 bg-slate-950/60 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-rose-950/30 border border-rose-800/40 text-rose-400">
+                  <ShieldCheck className="w-4 h-4 text-rose-400" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">NestJS</h2>
+                  <p className="text-xs text-slate-400">Enterprise TypeScript Applications</p>
+                </div>
+              </div>
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-rose-950/40 border border-rose-800/40 text-rose-300">
+                Enterprise
+              </span>
+            </div>
+
+            <p className="text-sm text-slate-300 leading-relaxed">
+              In NestJS, invoke <code className="font-mono text-emerald-400">envboot.init()</code> in <code className="font-mono text-slate-300">src/main.ts</code> before creating the application factory to ensure dependencies receive valid environment configurations:
+            </p>
+
+            <CodeBlock
+              filename="src/main.ts"
+              language="typescript"
+              code={`import envboot from "envboot";
 
 // Halt NestJS bootstrap before dependency injection container loads
 envboot.init();
@@ -161,21 +323,41 @@ async function bootstrap() {
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();`}
-          />
-        </section>
+            />
+          </section>
+        )}
 
-        {/* Bun & Deno */}
-        <section id="bun-deno" className="space-y-4">
-          <h2 className="text-2xl font-bold text-slate-100">Bun & Deno Runtimes</h2>
-          <p className="text-sm text-slate-300 leading-relaxed">
-            EnvBoot has zero dependencies and natively detects variables accessed via <code className="font-mono text-cyan-300">Bun.env</code> and <code className="font-mono text-cyan-300">Deno.env</code>:
-          </p>
+        {/* 5. Bun & Deno Section */}
+        {(selectedFramework === 'all' || selectedFramework === 'bun-deno') && (
+          <section id="bun-deno" className="p-6 rounded-2xl border border-slate-800 bg-slate-950/60 space-y-4">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 rounded-xl bg-amber-950/30 border border-amber-800/40 text-amber-400">
+                  <Cpu className="w-4 h-4 text-amber-400" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-white">Bun & Deno Runtimes</h2>
+                  <p className="text-xs text-slate-400">Native ESM & Modern JavaScript Runtimes</p>
+                </div>
+              </div>
+              <span className="px-2 py-0.5 rounded text-[11px] font-mono font-medium bg-amber-950/40 border border-amber-800/40 text-amber-300">
+                Runtimes
+              </span>
+            </div>
 
-          <CodeBlock
-            language="typescript"
-            filename="server.ts (Bun)"
-            code={`import envboot from "envboot";
+            <p className="text-sm text-slate-300 leading-relaxed">
+              EnvBoot has zero dependencies and natively validates variables whether accessed through <code className="font-mono text-cyan-300">Bun.env</code> or <code className="font-mono text-cyan-300">Deno.env</code>:
+            </p>
 
+            <CodeBlock
+              tabs={[
+                {
+                  title: 'Bun HTTP Server',
+                  filename: 'server.ts (Bun)',
+                  language: 'typescript',
+                  code: `import envboot from "envboot";
+
+// Validates Bun.env with zero dependencies
 envboot.init();
 
 Bun.serve({
@@ -183,9 +365,25 @@ Bun.serve({
   fetch(req) {
     return new Response("OK");
   },
-});`}
-          />
-        </section>
+});`,
+                },
+                {
+                  title: 'Deno HTTP',
+                  filename: 'main.ts (Deno)',
+                  language: 'typescript',
+                  code: `import envboot from "npm:envboot";
+
+// Validates Deno.env at startup
+envboot.init();
+
+Deno.serve({ port: 3000 }, (_req) => {
+  return new Response("Hello from Deno!");
+});`,
+                },
+              ]}
+            />
+          </section>
+        )}
       </div>
 
       <TableOfContents items={TOC_ITEMS} />

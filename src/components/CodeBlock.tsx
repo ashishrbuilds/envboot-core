@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
-import { Check, Copy } from 'lucide-react';
+import { Check, Copy, FileCode, Terminal } from 'lucide-react';
 import { usePackageManager, PackageManager } from '../context/PackageManagerContext';
+
+export interface CodeTab {
+  title: string;
+  code: string;
+  language?: string;
+  filename?: string;
+}
 
 interface CodeBlockProps {
   code?: string;
   language?: string;
   filename?: string;
+  showLineNumbers?: boolean;
+  // Multi-tab code snippets (e.g. App Router vs Pages Router)
+  tabs?: CodeTab[];
   // Multi package manager variant
   pmCommands?: {
     npm: string;
@@ -16,16 +26,77 @@ interface CodeBlockProps {
   };
 }
 
+function highlightLine(line: string) {
+  const trimmed = line.trim();
+  if (trimmed.startsWith('//') || trimmed.startsWith('#')) {
+    return <span className="text-slate-500 italic">{line}</span>;
+  }
+
+  // Tokenize line using regex
+  const regex = /(\/\/.*$|"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*'|`(?:\\.|[^`\\])*`|\b(?:import|from|export|default|function|return|const|let|var|await|async|if|else|type|interface|class|new|true|false|null|undefined)\b|\b(?:React|ReactDOM|Response|RootLayout|AppModule|NestFactory|NextConfig|process|Bun|Deno|console|envboot|config)\b|[{}()[\].,;:])/g;
+
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = regex.exec(line)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(line.slice(lastIndex, match.index));
+    }
+    const token = match[0];
+    if (token.startsWith('//')) {
+      parts.push(<span key={match.index} className="text-slate-500 italic">{token}</span>);
+    } else if (token.startsWith('"') || token.startsWith("'") || token.startsWith('`')) {
+      parts.push(<span key={match.index} className="text-emerald-400">{token}</span>);
+    } else if (
+      ['import', 'from', 'export', 'default', 'function', 'return', 'const', 'let', 'var', 'await', 'async', 'if', 'else', 'type', 'interface', 'class', 'new'].includes(token)
+    ) {
+      parts.push(<span key={match.index} className="text-purple-400 font-medium">{token}</span>);
+    } else if (['true', 'false', 'null', 'undefined'].includes(token)) {
+      parts.push(<span key={match.index} className="text-amber-400">{token}</span>);
+    } else if (['React', 'ReactDOM', 'Response', 'RootLayout', 'AppModule', 'NestFactory', 'NextConfig'].includes(token)) {
+      parts.push(<span key={match.index} className="text-yellow-300 font-medium">{token}</span>);
+    } else if (['process', 'Bun', 'Deno', 'console', 'envboot', 'config'].includes(token)) {
+      parts.push(<span key={match.index} className="text-sky-300 font-semibold">{token}</span>);
+    } else {
+      parts.push(<span key={match.index} className="text-slate-400">{token}</span>);
+    }
+    lastIndex = regex.lastIndex;
+  }
+
+  if (lastIndex < line.length) {
+    parts.push(line.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : ' ';
+}
+
 export const CodeBlock: React.FC<CodeBlockProps> = ({
-  code,
-  language = 'bash',
+  code = '',
+  language = 'typescript',
   filename,
+  showLineNumbers = true,
+  tabs,
   pmCommands,
 }) => {
   const { packageManager, setPackageManager } = usePackageManager();
+  const [activeTabIdx, setActiveTabIdx] = useState(0);
   const [copied, setCopied] = useState(false);
 
-  const activeCode = pmCommands ? pmCommands[packageManager] : code || '';
+  // Determine active code & filename
+  let activeCode = code;
+  let activeFilename = filename;
+  let activeLang = language;
+
+  if (pmCommands) {
+    activeCode = pmCommands[packageManager];
+    activeLang = 'bash';
+  } else if (tabs && tabs.length > 0) {
+    const currentTab = tabs[activeTabIdx] || tabs[0];
+    activeCode = currentTab.code;
+    activeFilename = currentTab.filename || currentTab.title;
+    activeLang = currentTab.language || language;
+  }
 
   const handleCopy = async () => {
     if (!activeCode) return;
@@ -34,19 +105,23 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const lines = activeCode.trim().split('\n');
+
   return (
-    <div className="my-5 rounded-xl border border-slate-800 dark:border-slate-800 light:border-slate-200 bg-slate-900/90 dark:bg-slate-900/90 light:bg-slate-950 overflow-hidden shadow-sm">
+    <div className="my-5 rounded-xl border border-slate-800 bg-[#090d16] dark:bg-[#090d16] light:bg-slate-950 overflow-hidden shadow-sm">
       {/* Header bar */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-950/80 dark:bg-slate-950/80 light:bg-slate-900 border-b border-slate-800/80 dark:border-slate-800/80 light:border-slate-800">
+      <div className="flex items-center justify-between px-3.5 py-2 bg-slate-900/90 dark:bg-slate-900/90 light:bg-slate-900 border-b border-slate-800/80">
+        {/* Left: Tabs or Filename */}
         {pmCommands ? (
           <div className="flex items-center gap-1">
+            <Terminal className="w-3.5 h-3.5 text-emerald-400 mr-1.5" />
             {(['npm', 'pnpm', 'yarn', 'bun', 'deno'] as PackageManager[]).map((pm) => (
               <button
                 key={pm}
                 onClick={() => setPackageManager(pm)}
                 className={`px-2.5 py-1 text-xs font-mono font-medium rounded-md transition-colors ${
                   packageManager === pm
-                    ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
+                    ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60'
                 }`}
               >
@@ -54,30 +129,43 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
               </button>
             ))}
           </div>
+        ) : tabs && tabs.length > 0 ? (
+          <div className="flex items-center gap-1 overflow-x-auto">
+            {tabs.map((tab, idx) => (
+              <button
+                key={tab.title}
+                onClick={() => setActiveTabIdx(idx)}
+                className={`px-3 py-1 text-xs font-medium rounded-md transition-colors flex items-center gap-1.5 whitespace-nowrap ${
+                  activeTabIdx === idx
+                    ? 'bg-slate-800 text-slate-100 font-semibold border border-slate-700/80'
+                    : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/40'
+                }`}
+              >
+                <FileCode className="w-3.5 h-3.5 text-emerald-400" />
+                <span>{tab.title}</span>
+              </button>
+            ))}
+          </div>
         ) : (
           <div className="flex items-center gap-2">
-            <div className="flex gap-1.5 mr-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
-              <span className="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
-              <span className="w-2.5 h-2.5 rounded-full bg-slate-700"></span>
-            </div>
-            {filename && (
+            <FileCode className="w-3.5 h-3.5 text-emerald-400" />
+            {activeFilename ? (
               <span className="text-xs font-mono text-slate-300 font-medium">
-                {filename}
+                {activeFilename}
               </span>
-            )}
-            {!filename && language && (
+            ) : (
               <span className="text-xs font-mono uppercase tracking-wider text-slate-500 font-medium">
-                {language}
+                {activeLang}
               </span>
             )}
           </div>
         )}
 
+        {/* Right: Copy Button */}
         <button
           onClick={handleCopy}
-          aria-label="Copy code to clipboard"
-          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors"
+          aria-label="Copy code"
+          className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium text-slate-400 hover:text-slate-100 hover:bg-slate-800 transition-colors ml-2"
         >
           {copied ? (
             <>
@@ -93,10 +181,28 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({
         </button>
       </div>
 
-      {/* Code contents */}
-      <pre className="p-4 overflow-x-auto text-sm font-mono leading-relaxed text-slate-200 selection:bg-emerald-500/30">
-        <code>{activeCode}</code>
-      </pre>
+      {/* Code with Line Numbers and Highlighting */}
+      <div className="p-4 overflow-x-auto text-[13px] font-mono leading-relaxed text-slate-200">
+        <div className="table w-full">
+          {lines.map((line, idx) => (
+            <div key={idx} className="table-row hover:bg-slate-900/30 transition-colors">
+              {showLineNumbers && !pmCommands && (
+                <span className="table-cell pr-4 select-none text-slate-600 text-right w-8 font-mono text-xs">
+                  {idx + 1}
+                </span>
+              )}
+              {pmCommands && (
+                <span className="table-cell pr-3 select-none text-emerald-400 font-bold w-4">
+                  $
+                </span>
+              )}
+              <span className="table-cell whitespace-pre">
+                {highlightLine(line)}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
